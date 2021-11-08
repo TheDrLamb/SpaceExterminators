@@ -7,11 +7,9 @@ public class CharacterState_Mobile : CharacterState_Base
     bool moving;
 
     CharacterPhysicsController physicsController;
-    CharacterRunParticleController particleController;
 
     public CharacterState_Mobile(CharacterStateMachineController _stateMachine) : base(_stateMachine) {
         physicsController = stateMachine.GetComponent<CharacterPhysicsController>();
-        particleController = stateMachine.GetComponent<CharacterRunParticleController>();
         inputDeadzone = physicsController.inputDeadzone;
         mapLayer = physicsController.mapLayer;
     }
@@ -26,25 +24,10 @@ public class CharacterState_Mobile : CharacterState_Base
         base.LogicUpdate();
 
         moving = Mathf.Abs(forwardRaw) > inputDeadzone;
-
-        if (interact > inputDeadzone)
-        {
-            if (!interactDown)
-            {
-                interactDown = true;
-                InteractDown();
-            }
-        }
-        else 
-        {
-            interactDown = false;
-            InteractUp();
-        }
     }
 
     protected override void VisualUpdate()
     {
-        particleController.SetIsMoving(moving);
     }
 
     protected override void PhysicsUpdate()
@@ -92,15 +75,5 @@ public class CharacterState_Mobile : CharacterState_Base
         }
 
         physicsController.SetLookDirection(lookDir);
-    }
-
-    void InteractDown() 
-    {
-        interactController.InteractDown();
-    }
-
-    void InteractUp()
-    {
-        interactController.InteractUp();
     }
 }

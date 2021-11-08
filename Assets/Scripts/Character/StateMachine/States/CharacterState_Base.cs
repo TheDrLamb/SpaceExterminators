@@ -10,14 +10,11 @@ public class CharacterState_Base
 
     public bool interactDown = false;
 
-    public CharacterInteractController interactController;
-
     protected CharacterStateMachineController stateMachine;
 
     public CharacterState_Base(CharacterStateMachineController _stateMachine)
     {
         stateMachine = _stateMachine;
-        interactController = stateMachine.GetComponent<CharacterInteractController>();
     }
 
     public virtual void Enter()
