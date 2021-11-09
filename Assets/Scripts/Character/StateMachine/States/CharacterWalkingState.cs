@@ -35,7 +35,7 @@ public class CharacterWalkingState : CharacterBaseState
         neededAccel = Vector3.ClampMagnitude(neededAccel, context.maxAcceleration * Utility.AccelerationFromDot(velDot));
         neededAccel.y = 0;
 
-        context.Rigid.AddForce((neededAccel * context.Rigid.mass) + Physics.gravity);
+        context.Rigid.AddForce((neededAccel * context.Rigid.mass));
     }
 
     public override void VisualUpdate() { }

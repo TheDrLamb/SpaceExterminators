@@ -71,6 +71,7 @@ public class CharacterStateMachine : MonoBehaviour
     public Vector3 GroundVelocity { get { return groundVelocity; } }
     public bool RequireNewJump { get { return requireNewJump; } set { requireNewJump = value; } }
     public float RigidbodyVelocityY { get { return rigid.velocity.y; } set { rigid.velocity = new Vector3(rigid.velocity.x, value, rigid.velocity.z); } }
+    public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
     #endregion
 
     #region Enable and Disable
@@ -203,11 +204,13 @@ public class CharacterStateMachine : MonoBehaviour
 
     void UpdateRideHeight()
     {
-        //Cast a Ray downward twice the length of ride height and apply a dampened spring force to the character to maintain them at ride height above the ground
         RaycastHit hit;
         if (Physics.Raycast(rigid.transform.position, -Vector3.up, out hit, rideHeight * rideDownFactor, mapLayer))
         {
-            isGrounded = true;
+            if (Vector3.Distance(this.transform.position, hit.point) <= rideHeight)
+            {
+                isGrounded = true;
+            } 
 
             Vector3 playerVelocity = rigid.velocity;
             Vector3 playerDownDir = -Vector3.up;
@@ -227,7 +230,7 @@ public class CharacterStateMachine : MonoBehaviour
 
             float d = hit.distance - rideHeight;
 
-            //Apply squash the player if d exceeds some limit?
+            //[NOTE] Apply squash the player if d exceeds some limit?
 
             float springForce = (d * rideSpringStrength) - (relativeVelocity * rideSpringDamping);
 
