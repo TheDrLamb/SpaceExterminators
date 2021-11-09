@@ -17,4 +17,9 @@ public class Utility
     public static Quaternion Multiply(Quaternion input, float scalar) {
         return new Quaternion(input.x * scalar, input.y * scalar, input.z * scalar, input.w * scalar);
     }
+
+    public static float AccelerationFromDot(float _dotProduct)
+    {
+        return Mathf.Clamp(1 - _dotProduct, 1, 2);
+    }
 }

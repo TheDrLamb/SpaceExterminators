@@ -1,76 +1,81 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterPhysicsController : MonoBehaviour
+public class CharacterStateMachine : MonoBehaviour
 {
+    #region Adjustable Variables
+    //Movement
     public float acceleration = 100;
     public float maxAcceleration = 200;
     public float maxSpeed = 10;
     public float rotationSpeed = 5;
     public float brakingForce = 5;
 
+    //Ride Height
+    public LayerMask mapLayer;
     public float rideHeight = 1.25f;
     public float rideSpringStrength = 150f;
     public float rideSpringDamping = 5f;
     public float rideDownFactor = 2f;
 
+    //Upright Force
     public float uprightSpringStrength = 100f;
     public float uprightSpringDamping = 5f;
 
-    public float jumpForce = 250f;
-    public bool isGrounded = false;
+    //Jumping
+    public float jumpForce = 100f;
+    public float gravityMultiplier = 3.0f;
+    #endregion
 
-    public LayerMask mapLayer;
+    #region Private Variables
+    //Physics
+    Rigidbody rigid;
 
-    CharacterControllerInput input;
-
+    //Rotation
     Quaternion lastPlayerTargetRotation;
     Quaternion playerTargetRotation;
-    Rigidbody rigid;
+
+    //Movement
     Vector3 groundVelocity;
-    Vector3 old_GoalVelocity;
-    Vector3 old_Move;
+    Vector3 oldGoalVelocity;
+    Vector3 oldMove;
 
-    Vector3 current_Move;
-    bool moving;
+    //Jumping
+    bool isGrounded = false;
 
+    //Input
+    CharacterControllerInput input;
+    Vector3 currentMoveDirection;
+    bool isMovePressed;
+    bool isSprintPressed;
+    bool isJumpPressed;
     Vector2 current_MousePosition;
 
+    //State machine
+    CharacterBaseState currentState;
+    CharacterStateFactory states;
+    #endregion
+
+    #region Getters and Setters
+    public CharacterBaseState CurrentState { get { return currentState; } set { currentState = value; } }
+    public bool IsJumpPressed { get { return isJumpPressed; } }
+    public Rigidbody Rigid { get { return rigid; } }
+    public bool IsGrounded { get { return isGrounded; } }
+    public bool IsMovePressed { get { return isMovePressed; } }
+    public bool IsSprintPressed { get { return isSprintPressed; } }
+    public Vector3 CurrentMoveDirection { get { return currentMoveDirection; } }
+    public Vector3 OldGoalVelocity { get { return oldGoalVelocity; } set { oldGoalVelocity = value; } }
+    public Vector3 OldMove { get { return oldMove; } set { oldMove = value; } }
+    public Vector3 GroundVelocity { get { return groundVelocity; } }
+    #endregion
+
+    #region Enable and Disable
     private void Awake()
     {
-        input = new CharacterControllerInput();
-
-        old_Move = Vector3.zero;
-        old_GoalVelocity = Vector3.zero;
-        current_Move = Vector3.zero;
-
-        input.CharacterControls.MovementDirection.performed += context =>
-        {
-            Vector2 temp = context.ReadValue<Vector2>();
-
-            current_Move = new Vector3(temp.y, 0 ,temp.x);
-        };
-
-        input.CharacterControls.Moving.performed += context =>
-        {
-            moving = context.ReadValueAsButton();
-        };
-
-        input.CharacterControls.MousePosition.performed += context => 
-        { 
-            current_MousePosition = context.ReadValue<Vector2>(); 
-        };
-
-        input.CharacterControls.Jump.performed += context =>
-        {
-            if (context.ReadValue<float>() > 0)
-            {
-                Jump();
-            }
-        };
+        InitializeGlobals();
+        InitializeInput();
+        InitializeStateMachine();
     }
 
     private void Start()
@@ -88,46 +93,83 @@ public class CharacterPhysicsController : MonoBehaviour
     {
         input.CharacterControls.Disable();
     }
+    #endregion
+
+    #region Update
+    private void Update()
+    {
+        currentState.Update();
+    }
 
     private void FixedUpdate()
     {
+        currentState.FixedUpdate();
+
         UpdateRideHeight();
         UpdateUprightForce();
-        if (moving) UpdateMovementDirection();
-        else ApplyBrakingForce();
         UpdateLookDirection();
     }
+    #endregion
 
-    public void UpdateMovementDirection()
+    #region Initializing
+    void InitializeGlobals()
     {
-        Vector3 move = (current_Move.x * this.transform.forward) + (current_Move.z * this.transform.right);
-
-        old_Move = move;
-
-        Vector3 unitVelocity = old_GoalVelocity.normalized;
-
-        float velDot = Vector3.Dot(old_Move, unitVelocity);
-
-        float accel = acceleration * AccelerationFromDot(velDot);
-
-        Vector3 goalVelocity = move * maxSpeed;
-
-        old_GoalVelocity = Vector3.MoveTowards(old_GoalVelocity, goalVelocity + groundVelocity, accel * Time.fixedDeltaTime);
-
-        Vector3 neededAccel = (old_GoalVelocity - rigid.velocity) / Time.fixedDeltaTime;
-
-        neededAccel = Vector3.ClampMagnitude(neededAccel, maxAcceleration * AccelerationFromDot(velDot));
-        neededAccel.y = 0;
-
-        rigid.AddForce((neededAccel * rigid.mass) + Physics.gravity);
+        oldMove = Vector3.zero;
+        oldGoalVelocity = Vector3.zero;
+        currentMoveDirection = Vector3.zero;
     }
 
-    public void ApplyBrakingForce() {
-        //Braking Force
-        Debug.Log("Braking");
-        rigid.AddForce(-brakingForce * rigid.velocity * rigid.mass);
+    void InitializeInput()
+    {
+        input = new CharacterControllerInput();
+
+        input.CharacterControls.MovementDirection.started += OnMovementInput;
+        input.CharacterControls.MovementDirection.performed += OnMovementInput;
+        input.CharacterControls.MovementDirection.canceled += OnMovementInput;
+
+        input.CharacterControls.Moving.started += OnMoving;
+        input.CharacterControls.Moving.performed += OnMoving;
+        input.CharacterControls.Moving.canceled += OnMoving;
+
+        input.CharacterControls.MousePosition.started += OnMouseMove;
+        input.CharacterControls.MousePosition.performed += OnMouseMove;
+        input.CharacterControls.MousePosition.canceled += OnMouseMove;
+
+        input.CharacterControls.Jump.started += OnJump;
+        input.CharacterControls.Jump.performed += OnJump;
+        input.CharacterControls.Jump.canceled += OnJump;
     }
 
+    void InitializeStateMachine(){
+        states = new CharacterStateFactory(this);
+        currentState = states.Grounded();
+        currentState.Enter();
+    }
+    #endregion
+
+    #region Input Events
+    void OnMovementInput(InputAction.CallbackContext context)
+    {
+        Vector2 temp = context.ReadValue<Vector2>();
+        currentMoveDirection = new Vector3(temp.y, 0, temp.x);
+    }
+
+    void OnMoving(InputAction.CallbackContext context)
+    {
+        isMovePressed = context.ReadValueAsButton();
+    }
+
+    void OnMouseMove(InputAction.CallbackContext context) {
+        current_MousePosition = context.ReadValue<Vector2>();
+    }
+
+    void OnJump(InputAction.CallbackContext context)
+    {
+        isJumpPressed = context.ReadValueAsButton();
+    }
+    #endregion
+
+    #region Movement Code
     public void UpdateLookDirection()
     {
         //Have the player look in the direction of the mouse cursor on the map
@@ -155,7 +197,8 @@ public class CharacterPhysicsController : MonoBehaviour
         lastPlayerTargetRotation = playerTargetRotation;
     }
 
-    void UpdateRideHeight() {
+    void UpdateRideHeight()
+    {
         //Cast a Ray downward twice the length of ride height and apply a dampened spring force to the character to maintain them at ride height above the ground
         RaycastHit hit;
         if (Physics.Raycast(rigid.transform.position, -Vector3.up, out hit, rideHeight * rideDownFactor, mapLayer))
@@ -191,15 +234,15 @@ public class CharacterPhysicsController : MonoBehaviour
                 hitRigidbody.AddForceAtPosition(playerDownDir * -springForce * rigid.mass, hit.point);
             }
         }
-        else 
+        else
         {
-            //Character is ungrounded, apply immediate force of gravity.
+            //Character is Ungrounded
             isGrounded = false;
-            rigid.AddForce(Physics.gravity * rigid.mass * 6f);
         }
     }
 
-    void UpdateUprightForce() {
+    void UpdateUprightForce()
+    {
         Quaternion playerCurrent = rigid.transform.rotation;
         Quaternion playerGoal = Utility.ShortestRotation(playerTargetRotation, playerCurrent);
 
@@ -213,13 +256,5 @@ public class CharacterPhysicsController : MonoBehaviour
 
         rigid.AddTorque((rotAxis * (rotRadians * uprightSpringStrength)) - (rigid.angularVelocity * uprightSpringDamping));
     }
-
-    void Jump() {
-        if(isGrounded)
-            rigid.AddForce(jumpForce * Vector3.up * rigid.mass);
-    }
-
-    float AccelerationFromDot(float _dotProduct) {
-        return Mathf.Clamp(1 - _dotProduct,1,2);
-    }
+    #endregion
 }
