@@ -8,7 +8,6 @@ public class CharacterIdleState : CharacterBaseState
 
     public override void Enter() 
     {
-        Debug.Log("Sub State Idle");
     }
 
     public override void Exit() { }

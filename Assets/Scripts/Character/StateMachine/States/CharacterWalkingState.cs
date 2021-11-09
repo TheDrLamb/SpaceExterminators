@@ -8,7 +8,6 @@ public class CharacterWalkingState : CharacterBaseState
 
     public override void Enter() 
     {
-        Debug.Log("Sub State Walk");
     }
 
     public override void Exit() { }

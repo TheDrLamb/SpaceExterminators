@@ -43,6 +43,7 @@ public class CharacterStateMachine : MonoBehaviour
 
     //Jumping
     bool isGrounded = false;
+    bool requireNewJump = false;
 
     //Input
     CharacterControllerInput input;
@@ -68,6 +69,8 @@ public class CharacterStateMachine : MonoBehaviour
     public Vector3 OldGoalVelocity { get { return oldGoalVelocity; } set { oldGoalVelocity = value; } }
     public Vector3 OldMove { get { return oldMove; } set { oldMove = value; } }
     public Vector3 GroundVelocity { get { return groundVelocity; } }
+    public bool RequireNewJump { get { return requireNewJump; } set { requireNewJump = value; } }
+    public float RigidbodyVelocityY { get { return rigid.velocity.y; } set { rigid.velocity = new Vector3(rigid.velocity.x, value, rigid.velocity.z); } }
     #endregion
 
     #region Enable and Disable
@@ -166,6 +169,7 @@ public class CharacterStateMachine : MonoBehaviour
     void OnJump(InputAction.CallbackContext context)
     {
         isJumpPressed = context.ReadValueAsButton();
+        requireNewJump = false;
     }
     #endregion
 

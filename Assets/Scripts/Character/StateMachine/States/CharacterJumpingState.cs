@@ -12,7 +12,8 @@ public class CharacterJumpingState : CharacterBaseState
 
     public override void Enter()
     {
-        context.Rigid.AddForce(context.jumpForce * Vector3.up * context.Rigid.mass);
+        context.RequireNewJump = true;
+        context.RigidbodyVelocityY = context.jumpForce + context.GroundVelocity.y;
     }
 
     public override void Exit()
@@ -35,7 +36,7 @@ public class CharacterJumpingState : CharacterBaseState
 
     public override void SwitchStateCheck()
     {
-        if (context.IsGrounded) {
+        if (context.IsGrounded && context.RigidbodyVelocityY <= 0) {
             SwitchState(factory.Grounded());
         }
     }

@@ -25,7 +25,7 @@ public class CharacterGroundedState : CharacterBaseState
     public override void PhysicsUpdate()
     {
         //Apply Gravity
-        context.Rigid.AddForce(Physics.gravity * context.Rigid.mass);
+        if(!context.IsGrounded) context.Rigid.AddForce(Physics.gravity * context.Rigid.mass * context.gravityMultiplier);
     }
 
     public override void VisualUpdate()
@@ -34,7 +34,7 @@ public class CharacterGroundedState : CharacterBaseState
 
     public override void SwitchStateCheck()
     {
-        if (context.IsJumpPressed) {
+        if (context.IsJumpPressed && !context.RequireNewJump) {
             SwitchState(factory.Jump());
         }
     }
