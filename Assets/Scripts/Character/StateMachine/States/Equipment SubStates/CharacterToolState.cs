@@ -8,7 +8,11 @@ public class CharacterToolState : CharacterBaseState
 
     public override void Enter()
     {
-        Debug.Log("Tool");
+        if (context.LastEquipment != 1)
+        {
+            context.LastEquipment = 1;
+            Debug.Log("Tool");
+        }
     }
 
     public override void Exit() { }

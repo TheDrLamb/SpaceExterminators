@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterIdleState : CharacterBaseState
+public class CharacterCrouchIdleState : CharacterBaseState
 {
-    public CharacterIdleState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory)
+    public CharacterCrouchIdleState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory)
     {
         InitializeSubState();
     }
@@ -39,9 +39,9 @@ public class CharacterIdleState : CharacterBaseState
                 SwitchState(factory.Walk());
             }
         }
-        else if (context.IsCrouchPressed) 
+        else if (!context.IsCrouchPressed) 
         {
-            SwitchState(factory.CrouchIdle());    
+            SwitchState(factory.Idle());    
         }
     }
 

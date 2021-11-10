@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterRunningState : CharacterBaseState
+public class CharacterSprintState : CharacterBaseState
 {
-    public CharacterRunningState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory)
+    public CharacterSprintState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory)
     {
         InitializeSubState();
     }
@@ -27,7 +27,7 @@ public class CharacterRunningState : CharacterBaseState
 
         float accel = context.acceleration * Utility.AccelerationFromDot(velDot);
 
-        Vector3 goalVelocity = move * context.maxSpeed;
+        Vector3 goalVelocity = move * context.sprintSpeed;
 
         context.OldGoalVelocity = Vector3.MoveTowards(context.OldGoalVelocity, goalVelocity + context.GroundVelocity, accel * Time.fixedDeltaTime);
 
@@ -70,5 +70,6 @@ public class CharacterRunningState : CharacterBaseState
                 SetSubState(factory.Throwable());
                 break;
         }
+        currentSubState.Enter();
     }
 }

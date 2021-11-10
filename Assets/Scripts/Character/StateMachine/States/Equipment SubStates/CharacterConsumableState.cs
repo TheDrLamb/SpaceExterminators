@@ -8,7 +8,11 @@ public class CharacterConsumableState : CharacterBaseState
 
     public override void Enter()
     {
-        Debug.Log("Consumable");
+        if (context.LastEquipment != 2)
+        {
+            context.LastEquipment = 2;
+            Debug.Log("Consumable");
+        }
     }
 
     public override void Exit() { }

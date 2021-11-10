@@ -9,6 +9,8 @@ public class CharacterStateMachine : MonoBehaviour
     public float acceleration = 100;
     public float maxAcceleration = 200;
     public float maxSpeed = 10;
+    public float sprintSpeed = 15;
+    public float crouchSpeed = 5;
     public float rotationSpeed = 5;
     public float brakingForce = 5;
 
@@ -50,10 +52,12 @@ public class CharacterStateMachine : MonoBehaviour
     Vector3 currentMoveDirection;
     bool isMovePressed;
     bool isSprintPressed;
+    bool isCrouchPressed;
     bool isJumpPressed;
     Vector2 current_MousePosition;
     //Equipment
     int equipment = 0;
+    int lastEquipment = -1;
 
     //State machine
     CharacterBaseState currentState;
@@ -67,6 +71,7 @@ public class CharacterStateMachine : MonoBehaviour
     public bool IsGrounded { get { return isGrounded; } }
     public bool IsMovePressed { get { return isMovePressed; } }
     public bool IsSprintPressed { get { return isSprintPressed; } }
+    public bool IsCrouchPressed { get { return isCrouchPressed; } }
     public Vector3 CurrentMoveDirection { get { return currentMoveDirection; } }
     public Vector3 OldGoalVelocity { get { return oldGoalVelocity; } set { oldGoalVelocity = value; } }
     public Vector3 OldMove { get { return oldMove; } set { oldMove = value; } }
@@ -75,6 +80,7 @@ public class CharacterStateMachine : MonoBehaviour
     public float RigidbodyVelocityY { get { return rigid.velocity.y; } set { rigid.velocity = new Vector3(rigid.velocity.x, value, rigid.velocity.z); } }
     public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
     public int Equipment { get { return equipment; } }
+    public int LastEquipment { get { return lastEquipment; } set { lastEquipment = value; } }
     #endregion
 
     #region Enable and Disable
@@ -145,6 +151,14 @@ public class CharacterStateMachine : MonoBehaviour
         input.CharacterControls.Jump.started += OnJump;
         input.CharacterControls.Jump.performed += OnJump;
         input.CharacterControls.Jump.canceled += OnJump;
+
+        input.CharacterControls.Sprint.started += OnSprint;
+        input.CharacterControls.Sprint.performed += OnSprint;
+        input.CharacterControls.Sprint.canceled += OnSprint;
+
+        input.CharacterControls.Crouch.started += OnCrouch;
+        input.CharacterControls.Crouch.performed += OnCrouch;
+        input.CharacterControls.Crouch.canceled += OnCrouch;
     }
 
     void InitializeStateMachine(){
@@ -174,6 +188,16 @@ public class CharacterStateMachine : MonoBehaviour
     {
         isJumpPressed = context.ReadValueAsButton();
         requireNewJump = false;
+    }
+
+    void OnSprint(InputAction.CallbackContext context) 
+    {
+        isSprintPressed = context.ReadValueAsButton();
+    }
+
+    void OnCrouch(InputAction.CallbackContext context)
+    {
+        isCrouchPressed = context.ReadValueAsButton();
     }
     #endregion
 

@@ -8,7 +8,11 @@ public class CharacterThrowableState : CharacterBaseState
 
     public override void Enter()
     {
-        Debug.Log("Throwable");
+        if (context.LastEquipment != 3)
+        {
+            context.LastEquipment = 3;
+            Debug.Log("Throwable");
+        }
     }
 
     public override void Exit() { }

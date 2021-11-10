@@ -20,7 +20,16 @@
     }
 
     public CharacterBaseState Sprint() {
-        return new CharacterRunningState(context, this);
+        return new CharacterSprintState(context, this);
+    }
+
+    public CharacterBaseState CrouchWalk() {
+        return new CharacterCrouchWalkState(context, this);
+    }
+
+    public CharacterBaseState CrouchIdle()
+    {
+        return new CharacterCrouchIdleState(context, this);
     }
 
     public CharacterBaseState Gun() {

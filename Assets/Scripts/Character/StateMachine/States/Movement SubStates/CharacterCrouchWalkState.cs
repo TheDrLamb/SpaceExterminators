@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterWalkingState : CharacterBaseState
+public class CharacterCrouchWalkState : CharacterBaseState
 {
-    public CharacterWalkingState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) 
+    public CharacterCrouchWalkState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory)
     {
         InitializeSubState();
     }
@@ -27,7 +27,7 @@ public class CharacterWalkingState : CharacterBaseState
 
         float accel = context.acceleration * Utility.AccelerationFromDot(velDot);
 
-        Vector3 goalVelocity = move * context.maxSpeed;
+        Vector3 goalVelocity = move * context.crouchSpeed;
 
         context.OldGoalVelocity = Vector3.MoveTowards(context.OldGoalVelocity, goalVelocity + context.GroundVelocity, accel * Time.fixedDeltaTime);
 
@@ -36,29 +36,34 @@ public class CharacterWalkingState : CharacterBaseState
         neededAccel = Vector3.ClampMagnitude(neededAccel, context.maxAcceleration * Utility.AccelerationFromDot(velDot));
         neededAccel.y = 0;
 
-        context.Rigid.AddForce((neededAccel * context.Rigid.mass));
+        context.Rigid.AddForce((neededAccel * context.Rigid.mass) + Physics.gravity);
     }
 
     public override void VisualUpdate() { }
 
-    public override void SwitchStateCheck()
+    public override void SwitchStateCheck() 
     {
         if (!context.IsMovePressed)
         {
-            SwitchState(factory.Idle());
+            if (context.IsCrouchPressed)
+            {
+                SwitchState(factory.CrouchIdle());
+            }
+            else
+            {
+                SwitchState(factory.Idle());
+            }
         }
-        else if (context.IsSprintPressed) 
+        else if (!context.IsCrouchPressed)
         {
-            SwitchState(factory.Sprint());
-        }else if (context.IsCrouchPressed)
-        {
-            SwitchState(factory.CrouchWalk());
+            SwitchState(factory.Walk());
         }
     }
 
-    public override void InitializeSubState() 
+    public override void InitializeSubState()
     {
-        switch (context.Equipment) {
+        switch (context.Equipment)
+        {
             case 0:
                 SetSubState(factory.Gun());
                 break;
@@ -66,7 +71,7 @@ public class CharacterWalkingState : CharacterBaseState
                 SetSubState(factory.Tool());
                 break;
             case 2:
-                SetSubState(factory.Consumable());;
+                SetSubState(factory.Consumable()); ;
                 break;
             case 3:
                 SetSubState(factory.Throwable());

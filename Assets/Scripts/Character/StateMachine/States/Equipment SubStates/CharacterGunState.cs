@@ -8,7 +8,11 @@ public class CharacterGunState : CharacterBaseState
 
     public override void Enter()
     {
-        Debug.Log("Gun");
+        if (context.LastEquipment != 0)
+        {
+            context.LastEquipment = 0;
+            Debug.Log("Gun");
+        }
     }
 
     public override void Exit() { }
