@@ -440,8 +440,8 @@ MonoBehaviour:
   rideDownFactor: 2
   uprightSpringStrength: 100
   uprightSpringDamping: 5
-  jumpForce: 100
-  gravityMultiplier: 6
+  jumpForce: 30
+  gravityMultiplier: 5
 --- !u!4 &146339628
 Transform:
   m_ObjectHideFlags: 0

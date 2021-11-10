@@ -22,4 +22,22 @@
     public CharacterBaseState Sprint() {
         return new CharacterRunningState(context, this);
     }
+
+    public CharacterBaseState Gun() {
+        return new CharacterGunState(context, this);
+    }
+
+    public CharacterBaseState Tool()
+    {
+        return new CharacterToolState(context, this);
+    }
+
+    public CharacterBaseState Consumable()
+    {
+        return new CharacterConsumableState(context, this);
+    }
+    public CharacterBaseState Throwable()
+    {
+        return new CharacterThrowableState(context, this);
+    }
 }

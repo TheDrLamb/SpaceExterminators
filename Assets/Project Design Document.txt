@@ -12,7 +12,7 @@ To Do List:
 		------------
 		- Grounded
 		
-		- Ungrounded
+		- Jumping
 		
 		- ?[Interacting]?
 			[NOTE] The interacting super state may be needed for handling player-(to)-environment interactions
@@ -22,6 +22,10 @@ To Do List:
 			- Idle
 			
 			- Walk
+			
+			- Sprint
+			
+			- Crouch
 			
 			Combat Sub State
 			----------------

@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterRunningState : CharacterBaseState
+public class CharacterWalkingState : CharacterBaseState
 {
-    public CharacterRunningState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
+    public CharacterWalkingState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) 
+    {
+        InitializeSubState();
+    }
 
     public override void Enter() { }
 
@@ -33,22 +36,38 @@ public class CharacterRunningState : CharacterBaseState
         neededAccel = Vector3.ClampMagnitude(neededAccel, context.maxAcceleration * Utility.AccelerationFromDot(velDot));
         neededAccel.y = 0;
 
-        context.Rigid.AddForce((neededAccel * context.Rigid.mass) + Physics.gravity);
+        context.Rigid.AddForce((neededAccel * context.Rigid.mass));
     }
 
     public override void VisualUpdate() { }
 
-    public override void SwitchStateCheck() 
+    public override void SwitchStateCheck()
     {
         if (!context.IsMovePressed)
         {
             SwitchState(factory.Idle());
         }
-        else if (!context.IsSprintPressed)
+        else if (context.IsSprintPressed) 
         {
-            SwitchState(factory.Walk());
+            SwitchState(factory.Sprint());
         }
     }
 
-    public override void InitializeSubState() { }
+    public override void InitializeSubState() 
+    {
+        switch (context.Equipment) {
+            case 0:
+                SetSubState(factory.Gun());
+                break;
+            case 1:
+                SetSubState(factory.Tool());
+                break;
+            case 2:
+                SetSubState(factory.Consumable());;
+                break;
+            case 3:
+                SetSubState(factory.Throwable());
+                break;
+        }
+    }
 }

@@ -52,6 +52,8 @@ public class CharacterStateMachine : MonoBehaviour
     bool isSprintPressed;
     bool isJumpPressed;
     Vector2 current_MousePosition;
+    //Equipment
+    int equipment = 0;
 
     //State machine
     CharacterBaseState currentState;
@@ -72,6 +74,7 @@ public class CharacterStateMachine : MonoBehaviour
     public bool RequireNewJump { get { return requireNewJump; } set { requireNewJump = value; } }
     public float RigidbodyVelocityY { get { return rigid.velocity.y; } set { rigid.velocity = new Vector3(rigid.velocity.x, value, rigid.velocity.z); } }
     public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
+    public int Equipment { get { return equipment; } }
     #endregion
 
     #region Enable and Disable
