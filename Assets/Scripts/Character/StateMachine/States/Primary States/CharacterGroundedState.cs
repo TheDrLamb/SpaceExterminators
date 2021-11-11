@@ -34,7 +34,7 @@ public class CharacterGroundedState : CharacterBaseState
 
     public override void SwitchStateCheck()
     {
-        if (context.IsJumpPressed && !context.RequireNewJump) {
+        if (context.IsJumpPressed && !context.RequireNewJump && !context.IsCrouchPressed) {
             SwitchState(factory.Jump());
         }
     }
