@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.InputSystem;
 
 public class CharacterPhysicsController : MonoBehaviour
 {
@@ -20,8 +20,12 @@ public class CharacterPhysicsController : MonoBehaviour
     public float uprightSpringStrength = 100f;
     public float uprightSpringDamping = 5f;
 
+    public float jumpForce = 250f;
+    public bool isGrounded = false;
+
     public LayerMask mapLayer;
-    public float inputDeadzone = 0.1f;
+
+    CharacterControllerInput input;
 
     Quaternion lastPlayerTargetRotation;
     Quaternion playerTargetRotation;
@@ -30,23 +34,73 @@ public class CharacterPhysicsController : MonoBehaviour
     Vector3 old_GoalVelocity;
     Vector3 old_Move;
 
+    Vector3 current_Move;
+    bool moving;
+
+    Vector2 current_MousePosition;
+
+    private void Awake()
+    {
+        input = new CharacterControllerInput();
+
+        old_Move = Vector3.zero;
+        old_GoalVelocity = Vector3.zero;
+        current_Move = Vector3.zero;
+
+        input.CharacterControls.MovementDirection.performed += context =>
+        {
+            Vector2 temp = context.ReadValue<Vector2>();
+
+            current_Move = new Vector3(temp.y, 0 ,temp.x);
+        };
+
+        input.CharacterControls.Moving.performed += context =>
+        {
+            moving = context.ReadValueAsButton();
+        };
+
+        input.CharacterControls.MousePosition.performed += context => 
+        { 
+            current_MousePosition = context.ReadValue<Vector2>(); 
+        };
+
+        input.CharacterControls.Jump.performed += context =>
+        {
+            if (context.ReadValue<float>() > 0)
+            {
+                Jump();
+            }
+        };
+    }
+
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
-        old_Move = Vector3.zero;
-        old_GoalVelocity = Vector3.zero;
         playerTargetRotation = lastPlayerTargetRotation = rigid.transform.rotation;
     }
+
+    private void OnEnable()
+    {
+        input.CharacterControls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        input.CharacterControls.Disable();
+    }
+
     private void FixedUpdate()
     {
         UpdateRideHeight();
         UpdateUprightForce();
+        if (moving) UpdateMovementDirection();
+        else ApplyBrakingForce();
+        UpdateLookDirection();
     }
 
-    public void SetMovementDirection(Vector3 move)
+    public void UpdateMovementDirection()
     {
-        if (move.magnitude > 1f)
-            move.Normalize();
+        Vector3 move = (current_Move.x * this.transform.forward) + (current_Move.z * this.transform.right);
 
         old_Move = move;
 
@@ -66,17 +120,38 @@ public class CharacterPhysicsController : MonoBehaviour
         neededAccel.y = 0;
 
         rigid.AddForce((neededAccel * rigid.mass) + Physics.gravity);
-        //playerTargetRotation = Quaternion.LookRotation(old_Move, Vector3.up); // Have player look in direction of movement
     }
 
-    public void ApplyBreakingForce() {
+    public void ApplyBrakingForce() {
         //Braking Force
-        rigid.velocity = new Vector3(rigid.velocity.x * (1 / brakingForce), rigid.velocity.y, rigid.velocity.z * (1 / brakingForce));
+        Debug.Log("Braking");
+        rigid.AddForce(-brakingForce * rigid.velocity * rigid.mass);
     }
 
-    public void SetLookDirection(Quaternion targetRotation)
+    public void UpdateLookDirection()
     {
-        playerTargetRotation = Quaternion.Slerp(lastPlayerTargetRotation, targetRotation, Time.fixedDeltaTime * rotationSpeed);
+        //Have the player look in the direction of the mouse cursor on the map
+        Quaternion lookDir;
+
+        //Default the Look Direction to forward
+        Vector3 forwardPlanarDir = this.transform.forward;
+        forwardPlanarDir.y = 0;
+        forwardPlanarDir.Normalize();
+        lookDir = Quaternion.LookRotation(forwardPlanarDir, Vector3.up);
+
+        //Get Mouse based direction if possible
+        Ray ray = Camera.main.ScreenPointToRay(current_MousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 1000, mapLayer))
+        {
+            //Get X-Z Planar Direction from the player to the hit point
+            Vector3 dir = new Vector3((hit.point.x - this.transform.position.x), 0, (hit.point.z - this.transform.position.z));
+            //Set player target rotation to look in that direction
+            lookDir = Quaternion.LookRotation(dir, Vector3.up);
+        }
+
+        playerTargetRotation = Quaternion.Slerp(lastPlayerTargetRotation, lookDir, Time.fixedDeltaTime * rotationSpeed);
         lastPlayerTargetRotation = playerTargetRotation;
     }
 
@@ -85,6 +160,8 @@ public class CharacterPhysicsController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(rigid.transform.position, -Vector3.up, out hit, rideHeight * rideDownFactor, mapLayer))
         {
+            isGrounded = true;
+
             Vector3 playerVelocity = rigid.velocity;
             Vector3 playerDownDir = -Vector3.up;
             Debug.DrawRay(rigid.transform.position, playerDownDir * 2);
@@ -117,6 +194,7 @@ public class CharacterPhysicsController : MonoBehaviour
         else 
         {
             //Character is ungrounded, apply immediate force of gravity.
+            isGrounded = false;
             rigid.AddForce(Physics.gravity * rigid.mass * 6f);
         }
     }
@@ -134,6 +212,11 @@ public class CharacterPhysicsController : MonoBehaviour
         float rotRadians = rotDegrees * Mathf.Deg2Rad;
 
         rigid.AddTorque((rotAxis * (rotRadians * uprightSpringStrength)) - (rigid.angularVelocity * uprightSpringDamping));
+    }
+
+    void Jump() {
+        if(isGrounded)
+            rigid.AddForce(jumpForce * Vector3.up * rigid.mass);
     }
 
     float AccelerationFromDot(float _dotProduct) {
