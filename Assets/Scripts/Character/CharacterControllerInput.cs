@@ -43,14 +43,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Moving"",
-                    ""type"": ""Button"",
-                    ""id"": ""57504a8e-57e4-477b-8647-b8ba5ac8cd27"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(pressPoint=0.1,behavior=2)""
-                },
-                {
                     ""name"": ""Sprint"",
                     ""type"": ""Button"",
                     ""id"": ""156664c5-1118-4293-9efd-b02af7431e0d"",
@@ -147,50 +139,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8b0bca4d-202b-4200-ac42-7c5759333e14"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Moving"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ba342e51-7d4d-43dc-a9ab-8308d21f6e5a"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Moving"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""10895eef-29d7-4cdc-9370-370151cae7bb"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Moving"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a5920786-dd1e-47d4-bd9f-2afedf609223"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Moving"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""9b4b7efe-21be-4798-b939-7c559f6ba02e"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
@@ -221,7 +169,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
         m_CharacterControls_MovementDirection = m_CharacterControls.FindAction("MovementDirection", throwIfNotFound: true);
         m_CharacterControls_Jump = m_CharacterControls.FindAction("Jump", throwIfNotFound: true);
         m_CharacterControls_MousePosition = m_CharacterControls.FindAction("MousePosition", throwIfNotFound: true);
-        m_CharacterControls_Moving = m_CharacterControls.FindAction("Moving", throwIfNotFound: true);
         m_CharacterControls_Sprint = m_CharacterControls.FindAction("Sprint", throwIfNotFound: true);
         m_CharacterControls_Crouch = m_CharacterControls.FindAction("Crouch", throwIfNotFound: true);
     }
@@ -276,7 +223,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_CharacterControls_MovementDirection;
     private readonly InputAction m_CharacterControls_Jump;
     private readonly InputAction m_CharacterControls_MousePosition;
-    private readonly InputAction m_CharacterControls_Moving;
     private readonly InputAction m_CharacterControls_Sprint;
     private readonly InputAction m_CharacterControls_Crouch;
     public struct CharacterControlsActions
@@ -286,7 +232,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
         public InputAction @MovementDirection => m_Wrapper.m_CharacterControls_MovementDirection;
         public InputAction @Jump => m_Wrapper.m_CharacterControls_Jump;
         public InputAction @MousePosition => m_Wrapper.m_CharacterControls_MousePosition;
-        public InputAction @Moving => m_Wrapper.m_CharacterControls_Moving;
         public InputAction @Sprint => m_Wrapper.m_CharacterControls_Sprint;
         public InputAction @Crouch => m_Wrapper.m_CharacterControls_Crouch;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
@@ -307,9 +252,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                 @MousePosition.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMousePosition;
                 @MousePosition.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMousePosition;
                 @MousePosition.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMousePosition;
-                @Moving.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMoving;
-                @Moving.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMoving;
-                @Moving.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnMoving;
                 @Sprint.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnSprint;
@@ -329,9 +271,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                 @MousePosition.started += instance.OnMousePosition;
                 @MousePosition.performed += instance.OnMousePosition;
                 @MousePosition.canceled += instance.OnMousePosition;
-                @Moving.started += instance.OnMoving;
-                @Moving.performed += instance.OnMoving;
-                @Moving.canceled += instance.OnMoving;
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
@@ -347,7 +286,6 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
         void OnMovementDirection(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
-        void OnMoving(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
     }

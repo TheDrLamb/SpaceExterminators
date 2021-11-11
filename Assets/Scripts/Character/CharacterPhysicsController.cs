@@ -46,31 +46,7 @@ public class CharacterPhysicsController : MonoBehaviour
         old_Move = Vector3.zero;
         old_GoalVelocity = Vector3.zero;
         current_Move = Vector3.zero;
-
-        input.CharacterControls.MovementDirection.performed += context =>
-        {
-            Vector2 temp = context.ReadValue<Vector2>();
-
-            current_Move = new Vector3(temp.y, 0 ,temp.x);
-        };
-
-        input.CharacterControls.Moving.performed += context =>
-        {
-            moving = context.ReadValueAsButton();
-        };
-
-        input.CharacterControls.MousePosition.performed += context => 
-        { 
-            current_MousePosition = context.ReadValue<Vector2>(); 
-        };
-
-        input.CharacterControls.Jump.performed += context =>
-        {
-            if (context.ReadValue<float>() > 0)
-            {
-                Jump();
-            }
-        };
+        InitializeInput();
     }
 
     private void Start()
@@ -97,6 +73,47 @@ public class CharacterPhysicsController : MonoBehaviour
         else ApplyBrakingForce();
         UpdateLookDirection();
     }
+
+    void InitializeInput()
+    {
+        input = new CharacterControllerInput();
+
+        input.CharacterControls.MovementDirection.started += OnMovementInput;
+        input.CharacterControls.MovementDirection.performed += OnMovementInput;
+        input.CharacterControls.MovementDirection.canceled += OnMovementInput;
+
+        input.CharacterControls.MousePosition.started += OnMouseMove;
+        input.CharacterControls.MousePosition.performed += OnMouseMove;
+        input.CharacterControls.MousePosition.canceled += OnMouseMove;
+
+        input.CharacterControls.Jump.started += OnJump;
+        input.CharacterControls.Jump.performed += OnJump;
+        input.CharacterControls.Jump.canceled += OnJump;
+    }
+
+    #region Input Events
+    void OnMovementInput(InputAction.CallbackContext context)
+    {
+        Vector2 temp = context.ReadValue<Vector2>();
+        current_Move = new Vector3(temp.y, 0, temp.x);
+        moving = temp.x != 0 || temp.y != 0;
+    }
+
+    void OnMoving(InputAction.CallbackContext context)
+    {
+        moving = context.ReadValueAsButton();
+    }
+
+    void OnMouseMove(InputAction.CallbackContext context)
+    {
+        current_MousePosition = context.ReadValue<Vector2>();
+    }
+
+    void OnJump(InputAction.CallbackContext context)
+    {
+        Jump();
+    }
+    #endregion
 
     public void UpdateMovementDirection()
     {

@@ -171,10 +171,6 @@ public class CharacterStateMachine : MonoBehaviour
         input.CharacterControls.MovementDirection.performed += OnMovementInput;
         input.CharacterControls.MovementDirection.canceled += OnMovementInput;
 
-        input.CharacterControls.Moving.started += OnMoving;
-        input.CharacterControls.Moving.performed += OnMoving;
-        input.CharacterControls.Moving.canceled += OnMoving;
-
         input.CharacterControls.MousePosition.started += OnMouseMove;
         input.CharacterControls.MousePosition.performed += OnMouseMove;
         input.CharacterControls.MousePosition.canceled += OnMouseMove;
@@ -204,6 +200,7 @@ public class CharacterStateMachine : MonoBehaviour
     {
         Vector2 temp = context.ReadValue<Vector2>();
         currentMoveDirection = new Vector3(temp.y, 0, temp.x);
+        isMovePressed = temp.x != 0 || temp.y != 0;
     }
 
     void OnMoving(InputAction.CallbackContext context)
