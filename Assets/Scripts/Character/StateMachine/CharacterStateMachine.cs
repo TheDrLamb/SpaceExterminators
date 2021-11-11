@@ -36,6 +36,10 @@ public class CharacterStateMachine : MonoBehaviour
 
     //Animation
     Animator anim;
+    int walkingHash;
+    int sprintingHash;
+    int crouchingHash;
+    int equipmentHash;
     int anim_EquipmentState = -1;
     bool anim_Crouch = false;
 
@@ -96,7 +100,7 @@ public class CharacterStateMachine : MonoBehaviour
         set 
         {
             anim_EquipmentState = value;
-            anim.SetInteger("Equipment", anim_EquipmentState);
+            anim.SetInteger(equipmentHash, anim_EquipmentState);
         } 
     }
     public bool Anim_Crouch { 
@@ -107,7 +111,7 @@ public class CharacterStateMachine : MonoBehaviour
         set 
         {
             anim_Crouch = value;
-            anim.SetBool("Crouch", anim_Crouch);
+            anim.SetBool(crouchingHash, anim_Crouch);
         }
     }
     #endregion
@@ -161,6 +165,11 @@ public class CharacterStateMachine : MonoBehaviour
         oldGoalVelocity = Vector3.zero;
         currentMoveDirection = Vector3.zero;
         anim = GetComponent<Animator>();
+
+        walkingHash = Animator.StringToHash(CharacterGlobals.walkingString);
+        sprintingHash = Animator.StringToHash(CharacterGlobals.walkingString);
+        crouchingHash = Animator.StringToHash(CharacterGlobals.crouchingString);
+        equipmentHash = Animator.StringToHash(CharacterGlobals.equipmentString);
     }
 
     void InitializeInput()
