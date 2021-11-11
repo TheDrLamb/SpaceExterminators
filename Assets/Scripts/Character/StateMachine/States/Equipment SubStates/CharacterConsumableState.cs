@@ -8,10 +8,10 @@ public class CharacterConsumableState : CharacterBaseState
 
     public override void Enter()
     {
-        if (context.LastEquipment != 2)
+        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Consumable)
         {
-            context.LastEquipment = 2;
-            context.Anim_EquipmentState = 2;
+            context.LastEquipment = (int)CharacterGlobals.Equipment.Consumable;
+            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Consumable;
         }
     }
 

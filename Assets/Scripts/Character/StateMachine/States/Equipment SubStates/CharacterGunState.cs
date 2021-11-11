@@ -8,10 +8,10 @@ public class CharacterGunState : CharacterBaseState
 
     public override void Enter()
     {
-        if (context.LastEquipment != 0)
+        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Gun)
         {
-            context.LastEquipment = 0;
-            context.Anim_EquipmentState = 0;
+            context.LastEquipment = (int)CharacterGlobals.Equipment.Gun;
+            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Gun;
         }
     }
 

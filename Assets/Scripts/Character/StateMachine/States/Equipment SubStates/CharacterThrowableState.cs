@@ -8,10 +8,10 @@ public class CharacterThrowableState : CharacterBaseState
 
     public override void Enter()
     {
-        if (context.LastEquipment != 3)
+        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Throwable)
         {
-            context.LastEquipment = 3;
-            context.Anim_EquipmentState = 3;
+            context.LastEquipment = (int)CharacterGlobals.Equipment.Throwable;
+            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Throwable;
         }
     }
 
