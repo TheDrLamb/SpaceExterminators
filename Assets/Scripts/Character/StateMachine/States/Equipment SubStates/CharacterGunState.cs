@@ -11,7 +11,7 @@ public class CharacterGunState : CharacterBaseState
         if (context.LastEquipment != 0)
         {
             context.LastEquipment = 0;
-            Debug.Log("Gun");
+            context.Anim_EquipmentState = 0;
         }
     }
 

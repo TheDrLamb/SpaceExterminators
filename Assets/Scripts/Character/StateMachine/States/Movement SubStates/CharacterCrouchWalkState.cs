@@ -9,9 +9,15 @@ public class CharacterCrouchWalkState : CharacterBaseState
         InitializeSubState();
     }
 
-    public override void Enter() { }
+    public override void Enter() 
+    {
+        context.Anim_Crouch = true;    
+    }
 
-    public override void Exit() { }
+    public override void Exit() 
+    {
+        context.Anim_Crouch = false;
+    }
 
     public override void LogicUpdate() { }
 

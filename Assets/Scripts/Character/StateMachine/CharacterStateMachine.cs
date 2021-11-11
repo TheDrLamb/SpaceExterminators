@@ -34,6 +34,11 @@ public class CharacterStateMachine : MonoBehaviour
     //Physics
     Rigidbody rigid;
 
+    //Animation
+    Animator anim;
+    int anim_EquipmentState = -1;
+    bool anim_Crouch = false;
+
     //Rotation
     Quaternion lastPlayerTargetRotation;
     Quaternion playerTargetRotation;
@@ -55,6 +60,7 @@ public class CharacterStateMachine : MonoBehaviour
     bool isCrouchPressed;
     bool isJumpPressed;
     Vector2 current_MousePosition;
+
     //Equipment
     int equipment = 0;
     int lastEquipment = -1;
@@ -81,6 +87,29 @@ public class CharacterStateMachine : MonoBehaviour
     public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
     public int Equipment { get { return equipment; } }
     public int LastEquipment { get { return lastEquipment; } set { lastEquipment = value; } }
+    public int Anim_EquipmentState 
+    { 
+        get 
+        { 
+            return anim_EquipmentState; 
+        } 
+        set 
+        {
+            anim_EquipmentState = value;
+            anim.SetInteger("Equipment", anim_EquipmentState);
+        } 
+    }
+    public bool Anim_Crouch { 
+        get 
+        { 
+            return anim_Crouch; 
+        }
+        set 
+        {
+            anim_Crouch = value;
+            anim.SetBool("Crouch", anim_Crouch);
+        }
+    }
     #endregion
 
     #region Enable and Disable
@@ -95,6 +124,7 @@ public class CharacterStateMachine : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         playerTargetRotation = lastPlayerTargetRotation = rigid.transform.rotation;
+
     }
 
     private void OnEnable()
@@ -130,6 +160,7 @@ public class CharacterStateMachine : MonoBehaviour
         oldMove = Vector3.zero;
         oldGoalVelocity = Vector3.zero;
         currentMoveDirection = Vector3.zero;
+        anim = GetComponent<Animator>();
     }
 
     void InitializeInput()

@@ -11,7 +11,7 @@ public class CharacterThrowableState : CharacterBaseState
         if (context.LastEquipment != 3)
         {
             context.LastEquipment = 3;
-            Debug.Log("Throwable");
+            context.Anim_EquipmentState = 3;
         }
     }
 

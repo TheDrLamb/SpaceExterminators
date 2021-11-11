@@ -11,7 +11,7 @@ public class CharacterToolState : CharacterBaseState
         if (context.LastEquipment != 1)
         {
             context.LastEquipment = 1;
-            Debug.Log("Tool");
+            context.Anim_EquipmentState = 1;
         }
     }
 

@@ -11,7 +11,7 @@ public class CharacterConsumableState : CharacterBaseState
         if (context.LastEquipment != 2)
         {
             context.LastEquipment = 2;
-            Debug.Log("Consumable");
+            context.Anim_EquipmentState = 2;
         }
     }
 
