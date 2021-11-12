@@ -8,7 +8,8 @@ public static class CharacterGlobals
     public const string crouchingString = "Crouch";
     public const string equipmentString = "Equipment";
 
-    public enum Equipment { 
+    public enum Equipment : int
+    {
         Gun,
         Tool,
         Consumable,

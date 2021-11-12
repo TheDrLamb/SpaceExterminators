@@ -78,14 +78,14 @@ public class CharacterStateMachine : MonoBehaviour
     public CharacterBaseState CurrentState { get { return currentState; } set { currentState = value; } }
     public bool IsJumpPressed { get { return isJumpPressed; } }
     public Rigidbody Rigid { get { return rigid; } }
-    public bool IsGrounded { get { return isGrounded; } }
+    public bool IsGrounded { get { return isGrounded; } set { isGrounded = value; } }
     public bool IsMovePressed { get { return isMovePressed; } }
     public bool IsSprintPressed { get { return isSprintPressed; } }
     public bool IsCrouchPressed { get { return isCrouchPressed; } }
     public Vector3 CurrentMoveDirection { get { return currentMoveDirection; } }
     public Vector3 OldGoalVelocity { get { return oldGoalVelocity; } set { oldGoalVelocity = value; } }
     public Vector3 OldMove { get { return oldMove; } set { oldMove = value; } }
-    public Vector3 GroundVelocity { get { return groundVelocity; } }
+    public Vector3 GroundVelocity { get { return groundVelocity; } set { groundVelocity = value; } }
     public bool RequireNewJump { get { return requireNewJump; } set { requireNewJump = value; } }
     public float RigidbodyVelocityY { get { return rigid.velocity.y; } set { rigid.velocity = new Vector3(rigid.velocity.x, value, rigid.velocity.z); } }
     public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
@@ -146,13 +146,12 @@ public class CharacterStateMachine : MonoBehaviour
     private void Update()
     {
         currentState.Update();
+        GroundedCheck();
     }
 
     private void FixedUpdate()
     {
         currentState.FixedUpdate();
-
-        UpdateRideHeight();
         UpdateUprightForce();
         UpdateLookDirection();
     }
@@ -238,7 +237,7 @@ public class CharacterStateMachine : MonoBehaviour
     }
     #endregion
 
-    #region Movement Code
+    #region Universal Code
     public void UpdateLookDirection()
     {
         //Have the player look in the direction of the mouse cursor on the map
@@ -266,7 +265,7 @@ public class CharacterStateMachine : MonoBehaviour
         lastPlayerTargetRotation = playerTargetRotation;
     }
 
-    void UpdateRideHeight()
+    void GroundedCheck()
     {
         RaycastHit hit;
         if (Physics.Raycast(rigid.transform.position, -Vector3.up, out hit, rideHeight * rideDownFactor, mapLayer))
@@ -274,35 +273,6 @@ public class CharacterStateMachine : MonoBehaviour
             if (Vector3.Distance(this.transform.position, hit.point) <= rideHeight)
             {
                 isGrounded = true;
-            } 
-
-            Vector3 playerVelocity = rigid.velocity;
-            Vector3 playerDownDir = -Vector3.up;
-            Debug.DrawRay(rigid.transform.position, playerDownDir * 2);
-
-            groundVelocity = Vector3.zero;
-            Rigidbody hitRigidbody = hit.rigidbody;
-            if (hitRigidbody != null)
-            {
-                groundVelocity = hitRigidbody.velocity;
-            }
-
-            float playerDirVelocity = Vector3.Dot(playerDownDir, playerVelocity);
-            float hitDirVelocity = Vector3.Dot(playerDownDir, groundVelocity);
-
-            float relativeVelocity = playerDirVelocity - hitDirVelocity;
-
-            float d = hit.distance - rideHeight;
-
-            //[NOTE] Apply squash the player if d exceeds some limit?
-
-            float springForce = (d * rideSpringStrength) - (relativeVelocity * rideSpringDamping);
-
-            rigid.AddForce((playerDownDir * springForce * rigid.mass));
-
-            if (hitRigidbody != null)
-            {
-                hitRigidbody.AddForceAtPosition(playerDownDir * -springForce * rigid.mass, hit.point);
             }
         }
         else

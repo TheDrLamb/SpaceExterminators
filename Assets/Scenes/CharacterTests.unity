@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 146339628}
-  smoothSpeed: 0.8
+  smoothSpeed: 0.75
   cameraOffset: {x: 0, y: 14, z: -10}
 --- !u!1 &81515514
 GameObject:
@@ -442,9 +442,9 @@ MonoBehaviour:
   rideSpringStrength: 150
   rideSpringDamping: 5
   rideDownFactor: 2
-  uprightSpringStrength: 2000
-  uprightSpringDamping: 5
-  jumpForce: 30
+  uprightSpringStrength: 500
+  uprightSpringDamping: 25
+  jumpForce: 15
   gravityMultiplier: 5
 --- !u!95 &146339627
 Animator:

@@ -26,6 +26,53 @@ public class CharacterGroundedState : CharacterBaseState
     {
         //Apply Gravity
         if(!context.IsGrounded) context.Rigid.AddForce(Physics.gravity * context.Rigid.mass * context.gravityMultiplier);
+        UpdateRideHeight();
+    }
+
+    void UpdateRideHeight()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(context.Rigid.transform.position, -Vector3.up, out hit, context.rideHeight * context.rideDownFactor, context.mapLayer))
+        {
+            if (Vector3.Distance(context.transform.position, hit.point) <= context.rideHeight)
+            {
+                context.IsGrounded = true;
+            }
+
+            Vector3 playerVelocity = context.Rigid.velocity;
+            Vector3 playerDownDir = -Vector3.up;
+            Debug.DrawRay(context.Rigid.transform.position, playerDownDir * 2);
+
+            Vector3 GroundVelocity = Vector3.zero;
+            Rigidbody hitRigidbody = hit.rigidbody;
+            if (hitRigidbody != null)
+            {
+                context.GroundVelocity = GroundVelocity = hitRigidbody.velocity;
+            }
+
+            float playerDirVelocity = Vector3.Dot(playerDownDir, playerVelocity);
+            float hitDirVelocity = Vector3.Dot(playerDownDir, GroundVelocity);
+
+            float relativeVelocity = playerDirVelocity - hitDirVelocity;
+
+            float d = hit.distance - context.rideHeight;
+
+            //[NOTE] Apply squash the player if d exceeds some limit?
+
+            float springForce = (d * context.rideSpringStrength) - (relativeVelocity * context.rideSpringDamping);
+
+            context.Rigid.AddForce((playerDownDir * springForce * context.Rigid.mass));
+
+            if (hitRigidbody != null)
+            {
+                hitRigidbody.AddForceAtPosition(playerDownDir * -springForce * context.Rigid.mass, hit.point);
+            }
+        }
+        else
+        {
+            //Character is Ungrounded
+            context.IsGrounded = false;
+        }
     }
 
     public override void VisualUpdate()

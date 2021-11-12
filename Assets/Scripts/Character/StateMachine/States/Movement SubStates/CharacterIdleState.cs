@@ -17,7 +17,7 @@ public class CharacterIdleState : CharacterBaseState
 
     public override void PhysicsUpdate() 
     {
-        context.Rigid.AddForce(-context.brakingForce * context.Rigid.velocity * context.Rigid.mass);
+        context.Rigid.AddForce(-context.brakingForce * context.RigidbodyPlanarVelocity * context.Rigid.mass);
     }
 
     public override void VisualUpdate() { }

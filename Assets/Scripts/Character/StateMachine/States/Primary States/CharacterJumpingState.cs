@@ -18,6 +18,7 @@ public class CharacterJumpingState : CharacterBaseState
 
     public override void Exit()
     {
+        //[NOTE] -> Add Squash/Landing animation to the character here
     }
 
     public override void LogicUpdate()
@@ -27,7 +28,14 @@ public class CharacterJumpingState : CharacterBaseState
     public override void PhysicsUpdate()
     {
         //Apply Gravity
-        context.Rigid.AddForce(Physics.gravity * context.Rigid.mass * context.gravityMultiplier);
+        if (context.RigidbodyVelocityY > 0)
+        {
+            context.Rigid.AddForce(Physics.gravity * context.Rigid.mass * (0.5f * context.gravityMultiplier));
+        }
+        else 
+        {
+            context.Rigid.AddForce(Physics.gravity * context.Rigid.mass * context.gravityMultiplier);
+        }
     }
 
     public override void VisualUpdate()
