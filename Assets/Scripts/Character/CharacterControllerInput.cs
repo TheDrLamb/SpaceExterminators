@@ -57,6 +57,38 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(pressPoint=0.1,behavior=2)""
+                },
+                {
+                    ""name"": ""EquipmentWheel"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""11e7dca0-2f0e-429c-b374-366b1b5ea094"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=2)""
+                },
+                {
+                    ""name"": ""Equipment"",
+                    ""type"": ""Value"",
+                    ""id"": ""17385e51-900a-4ee0-b046-38b616c21a84"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""d4ad6c4a-6b9b-43e5-9c39-4415a103a93e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""8aa15990-3e87-4f04-9f05-da45387bcd37"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -158,6 +190,83 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11aa57f5-1d18-4758-8758-21168d4ba42d"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": ""Clamp(min=-1,max=1)"",
+                    ""groups"": """",
+                    ""action"": ""EquipmentWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed241dde-cb2d-46bd-9abe-6192872dd783"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": ""Clamp(min=1,max=1)"",
+                    ""groups"": """",
+                    ""action"": ""Equipment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2968cd83-94d5-4be0-aeb2-fb5e7cd99bd6"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": ""Clamp(min=2,max=2)"",
+                    ""groups"": """",
+                    ""action"": ""Equipment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""61eeff3b-c3f9-4631-9fcd-68d249c7c182"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": ""Clamp(min=3,max=3)"",
+                    ""groups"": """",
+                    ""action"": ""Equipment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de38521c-bd0b-40c5-b9b8-68309caed63f"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": ""Clamp(min=4,max=4)"",
+                    ""groups"": """",
+                    ""action"": ""Equipment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed393f94-2415-45da-a658-47721d857a8a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ef6b99a-a7b1-488e-9540-ff79ff6b8b56"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -171,6 +280,10 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
         m_CharacterControls_MousePosition = m_CharacterControls.FindAction("MousePosition", throwIfNotFound: true);
         m_CharacterControls_Sprint = m_CharacterControls.FindAction("Sprint", throwIfNotFound: true);
         m_CharacterControls_Crouch = m_CharacterControls.FindAction("Crouch", throwIfNotFound: true);
+        m_CharacterControls_EquipmentWheel = m_CharacterControls.FindAction("EquipmentWheel", throwIfNotFound: true);
+        m_CharacterControls_Equipment = m_CharacterControls.FindAction("Equipment", throwIfNotFound: true);
+        m_CharacterControls_Fire = m_CharacterControls.FindAction("Fire", throwIfNotFound: true);
+        m_CharacterControls_Aim = m_CharacterControls.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -225,6 +338,10 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_CharacterControls_MousePosition;
     private readonly InputAction m_CharacterControls_Sprint;
     private readonly InputAction m_CharacterControls_Crouch;
+    private readonly InputAction m_CharacterControls_EquipmentWheel;
+    private readonly InputAction m_CharacterControls_Equipment;
+    private readonly InputAction m_CharacterControls_Fire;
+    private readonly InputAction m_CharacterControls_Aim;
     public struct CharacterControlsActions
     {
         private @CharacterControllerInput m_Wrapper;
@@ -234,6 +351,10 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
         public InputAction @MousePosition => m_Wrapper.m_CharacterControls_MousePosition;
         public InputAction @Sprint => m_Wrapper.m_CharacterControls_Sprint;
         public InputAction @Crouch => m_Wrapper.m_CharacterControls_Crouch;
+        public InputAction @EquipmentWheel => m_Wrapper.m_CharacterControls_EquipmentWheel;
+        public InputAction @Equipment => m_Wrapper.m_CharacterControls_Equipment;
+        public InputAction @Fire => m_Wrapper.m_CharacterControls_Fire;
+        public InputAction @Aim => m_Wrapper.m_CharacterControls_Aim;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +379,18 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                 @Crouch.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnCrouch;
+                @EquipmentWheel.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnEquipmentWheel;
+                @EquipmentWheel.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnEquipmentWheel;
+                @EquipmentWheel.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnEquipmentWheel;
+                @Equipment.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnEquipment;
+                @Equipment.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnEquipment;
+                @Equipment.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnEquipment;
+                @Fire.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnFire;
+                @Fire.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnFire;
+                @Fire.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnFire;
+                @Aim.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_CharacterControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,6 +410,18 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
+                @EquipmentWheel.started += instance.OnEquipmentWheel;
+                @EquipmentWheel.performed += instance.OnEquipmentWheel;
+                @EquipmentWheel.canceled += instance.OnEquipmentWheel;
+                @Equipment.started += instance.OnEquipment;
+                @Equipment.performed += instance.OnEquipment;
+                @Equipment.canceled += instance.OnEquipment;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -288,5 +433,9 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
         void OnMousePosition(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnEquipmentWheel(InputAction.CallbackContext context);
+        void OnEquipment(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

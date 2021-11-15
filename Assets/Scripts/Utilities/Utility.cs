@@ -22,4 +22,14 @@ public class Utility
     {
         return Mathf.Clamp(1 - _dotProduct, 1, 2);
     }
+
+    public static int WrapAround(int _value, int _min, int _max) {
+        if (_value > _max) {
+            _value = _min;
+        }
+        if (_value < _min) {
+            _value = _max;
+        }
+        return _value;
+    }
 }

@@ -64,6 +64,7 @@ public class CharacterStateMachine : MonoBehaviour
     bool isCrouchPressed;
     bool isJumpPressed;
     Vector2 current_MousePosition;
+    bool canSwapEquipment;
 
     //Equipment
     int equipment = 0;
@@ -91,29 +92,30 @@ public class CharacterStateMachine : MonoBehaviour
     public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
     public int Equipment { get { return equipment; } }
     public int LastEquipment { get { return lastEquipment; } set { lastEquipment = value; } }
-    public int Anim_EquipmentState 
-    { 
-        get 
-        { 
-            return anim_EquipmentState; 
-        } 
-        set 
+    public int Anim_EquipmentState
+    {
+        get
+        {
+            return anim_EquipmentState;
+        }
+        set
         {
             anim_EquipmentState = value;
             anim.SetInteger(equipmentHash, anim_EquipmentState);
-        } 
-    }
-    public bool Anim_Crouch { 
-        get 
-        { 
-            return anim_Crouch; 
         }
-        set 
+    }
+    public bool Anim_Crouch {
+        get
+        {
+            return anim_Crouch;
+        }
+        set
         {
             anim_Crouch = value;
             anim.SetBool(crouchingHash, anim_Crouch);
         }
     }
+    public bool CanSwapEquipment { get { return canSwapEquipment; } set { canSwapEquipment = value; } }
     #endregion
 
     #region Enable and Disable
@@ -194,9 +196,13 @@ public class CharacterStateMachine : MonoBehaviour
         input.CharacterControls.Crouch.started += OnCrouch;
         input.CharacterControls.Crouch.performed += OnCrouch;
         input.CharacterControls.Crouch.canceled += OnCrouch;
+
+        input.CharacterControls.EquipmentWheel.started += OnScroll;
+
+        input.CharacterControls.Equipment.performed += OnEquip;
     }
 
-    void InitializeStateMachine(){
+    void InitializeStateMachine() {
         states = new CharacterStateFactory(this);
         currentState = states.Grounded();
         currentState.Enter();
@@ -226,7 +232,7 @@ public class CharacterStateMachine : MonoBehaviour
         requireNewJump = false;
     }
 
-    void OnSprint(InputAction.CallbackContext context) 
+    void OnSprint(InputAction.CallbackContext context)
     {
         isSprintPressed = context.ReadValueAsButton();
     }
@@ -234,6 +240,36 @@ public class CharacterStateMachine : MonoBehaviour
     void OnCrouch(InputAction.CallbackContext context)
     {
         isCrouchPressed = context.ReadValueAsButton();
+    }
+
+    void OnScroll(InputAction.CallbackContext context) {
+        if (canSwapEquipment) 
+        {
+            int newEquipment = equipment - (int)context.ReadValue<float>();
+            if (newEquipment != equipment)
+            {
+                canSwapEquipment = false;
+                equipment = Utility.WrapAround(newEquipment, 0, 3);
+            }
+        }
+    }
+
+    void OnEquip(InputAction.CallbackContext context) {
+        if (canSwapEquipment)
+        {
+            int newEquipment = (int)context.ReadValue<float>() - 1;
+            if (newEquipment != equipment)
+            {
+                canSwapEquipment = false;
+                equipment = Utility.WrapAround(newEquipment, 0, 3);
+            }
+        }
+    }
+    #endregion
+
+    #region Animation Callbacks
+    public void EnableSwapEquipment() {
+        canSwapEquipment = true;
     }
     #endregion
 
