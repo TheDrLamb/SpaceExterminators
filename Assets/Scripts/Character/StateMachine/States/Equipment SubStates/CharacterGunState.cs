@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharacterGunState : CharacterBaseState
 {
@@ -13,6 +14,7 @@ public class CharacterGunState : CharacterBaseState
             context.LastEquipment = (int)CharacterGlobals.Equipment.Gun;
             context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Gun;
         }
+        context.SetFireActions(OnFire);
     }
 
     public override void Exit() { }
@@ -40,4 +42,9 @@ public class CharacterGunState : CharacterBaseState
     }
 
     public override void InitializeSubState() { }
+
+    public void OnFire(InputAction.CallbackContext context) 
+    {
+        Debug.Log("Bang");
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -65,6 +66,8 @@ public class CharacterStateMachine : MonoBehaviour
     bool isJumpPressed;
     Vector2 current_MousePosition;
     bool canSwapEquipment;
+    //Combat Input Delegates
+    Action<InputAction.CallbackContext> onFire;
 
     //Equipment
     int equipment = 0;
@@ -200,6 +203,10 @@ public class CharacterStateMachine : MonoBehaviour
         input.CharacterControls.EquipmentWheel.started += OnScroll;
 
         input.CharacterControls.Equipment.performed += OnEquip;
+
+        input.CharacterControls.Fire.started += NullAction;
+        input.CharacterControls.Fire.canceled += NullAction;
+        input.CharacterControls.Fire.performed += NullAction;
     }
 
     void InitializeStateMachine() {
@@ -215,11 +222,6 @@ public class CharacterStateMachine : MonoBehaviour
         Vector2 temp = context.ReadValue<Vector2>();
         currentMoveDirection = new Vector3(temp.y, 0, temp.x);
         isMovePressed = temp.x != 0 || temp.y != 0;
-    }
-
-    void OnMoving(InputAction.CallbackContext context)
-    {
-        isMovePressed = context.ReadValueAsButton();
     }
 
     void OnMouseMove(InputAction.CallbackContext context) {
@@ -264,6 +266,19 @@ public class CharacterStateMachine : MonoBehaviour
                 equipment = Utility.WrapAround(newEquipment, 0, 3);
             }
         }
+    }
+
+    void NullAction(InputAction.CallbackContext context) { 
+        
+    }
+    public void SetFireActions(Action<InputAction.CallbackContext> _newAction) {
+        input.CharacterControls.Fire.started -= onFire;
+        input.CharacterControls.Fire.performed -= onFire;
+        input.CharacterControls.Fire.canceled -= onFire;
+        onFire = _newAction;
+        input.CharacterControls.Fire.started += onFire;
+        input.CharacterControls.Fire.performed += onFire;
+        input.CharacterControls.Fire.canceled += onFire;
     }
     #endregion
 
