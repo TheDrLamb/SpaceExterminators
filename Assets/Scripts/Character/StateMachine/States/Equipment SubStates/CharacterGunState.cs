@@ -14,7 +14,8 @@ public class CharacterGunState : CharacterBaseState
             context.LastEquipment = (int)CharacterGlobals.Equipment.Gun;
             context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Gun;
         }
-        context.SetFireActions(OnFire);
+        Set_OnFireDown();
+        Set_OnFireUp();
     }
 
     public override void Exit() { }
@@ -43,8 +44,22 @@ public class CharacterGunState : CharacterBaseState
 
     public override void InitializeSubState() { }
 
-    public void OnFire(InputAction.CallbackContext context) 
+    void Set_OnFireDown() {
+        context.SetFireAction(ActionType.Perform, OnFireDownAction);
+    }
+
+    void OnFireDownAction(InputAction.CallbackContext context) 
     {
         Debug.Log("Bang");
+    }
+
+    void Set_OnFireUp()
+    {
+        context.SetFireAction(ActionType.Cancel, OnFireUpAction);
+    }
+
+    void OnFireUpAction(InputAction.CallbackContext context)
+    {
+        Debug.Log("Click");
     }
 }

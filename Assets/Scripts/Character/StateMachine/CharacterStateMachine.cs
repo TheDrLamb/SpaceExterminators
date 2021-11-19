@@ -67,7 +67,9 @@ public class CharacterStateMachine : MonoBehaviour
     Vector2 current_MousePosition;
     bool canSwapEquipment;
     //Combat Input Delegates
-    Action<InputAction.CallbackContext> onFire;
+    Action<InputAction.CallbackContext> onFire_Start;
+    Action<InputAction.CallbackContext> onFire_Cancel;
+    Action<InputAction.CallbackContext> onFire_Perform;
 
     //Equipment
     int equipment = 0;
@@ -271,14 +273,25 @@ public class CharacterStateMachine : MonoBehaviour
     void NullAction(InputAction.CallbackContext context) { 
         
     }
-    public void SetFireActions(Action<InputAction.CallbackContext> _newAction) {
-        input.CharacterControls.Fire.started -= onFire;
-        input.CharacterControls.Fire.performed -= onFire;
-        input.CharacterControls.Fire.canceled -= onFire;
-        onFire = _newAction;
-        input.CharacterControls.Fire.started += onFire;
-        input.CharacterControls.Fire.performed += onFire;
-        input.CharacterControls.Fire.canceled += onFire;
+    public void SetFireAction(ActionType _action, Action<InputAction.CallbackContext> _newAction) 
+    {
+        switch (_action) {
+            case ActionType.Start:
+                input.CharacterControls.Fire.started -= onFire_Start;
+                onFire_Start = _newAction;
+                input.CharacterControls.Fire.started += onFire_Start;
+                break;
+            case ActionType.Perform:
+                input.CharacterControls.Fire.performed -= onFire_Perform;
+                onFire_Perform = _newAction;
+                input.CharacterControls.Fire.performed += onFire_Perform;
+                break;
+            case ActionType.Cancel:
+                input.CharacterControls.Fire.canceled -= onFire_Cancel;
+                onFire_Cancel = _newAction;
+                input.CharacterControls.Fire.canceled += onFire_Cancel;
+                break;
+        }
     }
     #endregion
 
@@ -349,4 +362,10 @@ public class CharacterStateMachine : MonoBehaviour
         rigid.AddTorque((rotAxis * (rotRadians * uprightSpringStrength)) - (rigid.angularVelocity * uprightSpringDamping));
     }
     #endregion
+}
+
+public enum ActionType { 
+    Start,
+    Cancel,
+    Perform
 }
