@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class CharacterConsumableState : CharacterBaseState
+public class CharacterConsumableState : CharacterEquipmentBaseState
 {
     public CharacterConsumableState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {
+        base.Enter();
         if (context.LastEquipment != (int)CharacterGlobals.Equipment.Consumable)
         {
             context.LastEquipment = (int)CharacterGlobals.Equipment.Consumable;
@@ -40,4 +42,11 @@ public class CharacterConsumableState : CharacterBaseState
     }
 
     public override void InitializeSubState() { }
+
+    public override void OnFireDownAction(InputAction.CallbackContext context)
+    {
+        Debug.Log("Chug!");
+    }
+
+    public override void OnFireUpAction(InputAction.CallbackContext context) { }
 }

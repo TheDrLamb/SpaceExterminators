@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterGunState : CharacterBaseState
+public class CharacterGunState : CharacterEquipmentBaseState
 {
     public CharacterGunState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {
+        base.Enter();
         if (context.LastEquipment != (int)CharacterGlobals.Equipment.Gun)
         {
             context.LastEquipment = (int)CharacterGlobals.Equipment.Gun;
             context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Gun;
         }
-        Set_OnFireDown();
-        Set_OnFireUp();
     }
 
     public override void Exit() { }
@@ -44,21 +43,12 @@ public class CharacterGunState : CharacterBaseState
 
     public override void InitializeSubState() { }
 
-    void Set_OnFireDown() {
-        context.SetFireAction(ActionType.Perform, OnFireDownAction);
-    }
-
-    void OnFireDownAction(InputAction.CallbackContext context) 
+    public override void OnFireDownAction(InputAction.CallbackContext context)
     {
         Debug.Log("Bang");
     }
 
-    void Set_OnFireUp()
-    {
-        context.SetFireAction(ActionType.Cancel, OnFireUpAction);
-    }
-
-    void OnFireUpAction(InputAction.CallbackContext context)
+    public override void OnFireUpAction(InputAction.CallbackContext context)
     {
         Debug.Log("Click");
     }
