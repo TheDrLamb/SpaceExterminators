@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterGunState : CharacterEquipmentBaseState
+public class CharacterToolBaseState : CharacterEquipmentBaseState 
 {
-    public CharacterGunState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
+    public CharacterToolBaseState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {
         base.Enter();
-        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Gun)
+        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Tool)
         {
-            context.LastEquipment = (int)CharacterGlobals.Equipment.Gun;
-            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Gun;
+            context.LastEquipment = (int)CharacterGlobals.Equipment.Tool;
+            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Tool;
         }
     }
 
@@ -29,8 +29,8 @@ public class CharacterGunState : CharacterEquipmentBaseState
     {
         switch (context.Equipment)
         {
-            case 1:
-                SwitchState(factory.Tool());
+            case 0:
+                SwitchState(factory.Gun());
                 break;
             case 2:
                 SwitchState(factory.Consumable()); ;
@@ -45,11 +45,8 @@ public class CharacterGunState : CharacterEquipmentBaseState
 
     public override void OnFireDownAction(InputAction.CallbackContext context)
     {
-        Debug.Log("Bang");
+        Debug.Log("Swing!");
     }
 
-    public override void OnFireUpAction(InputAction.CallbackContext context)
-    {
-        Debug.Log("Click");
-    }
+    public override void OnFireUpAction(InputAction.CallbackContext context) { }
 }

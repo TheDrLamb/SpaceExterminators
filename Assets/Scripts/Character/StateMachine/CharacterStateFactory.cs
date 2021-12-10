@@ -33,20 +33,20 @@
     }
 
     public CharacterBaseState Gun() {
-        return new CharacterGunState(context, this);
+        return new CharacterGunBaseState(context, this);
     }
 
     public CharacterBaseState Tool()
     {
-        return new CharacterToolState(context, this);
+        return new CharacterToolBaseState(context, this);
     }
 
     public CharacterBaseState Consumable()
     {
-        return new CharacterConsumableState(context, this);
+        return new CharacterConsumableBaseState(context, this);
     }
     public CharacterBaseState Throwable()
     {
-        return new CharacterThrowableState(context, this);
+        return new CharacterThrowableBaseState(context, this);
     }
 }

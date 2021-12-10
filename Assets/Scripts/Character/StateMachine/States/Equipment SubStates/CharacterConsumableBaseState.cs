@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterConsumableState : CharacterEquipmentBaseState
+public class CharacterConsumableBaseState : CharacterEquipmentBaseState
 {
-    public CharacterConsumableState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
+    public CharacterConsumableBaseState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {

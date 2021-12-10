@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterThrowableState : CharacterEquipmentBaseState
+public class CharacterGunBaseState : CharacterEquipmentBaseState
 {
-    public CharacterThrowableState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
+    public CharacterGunBaseState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {
         base.Enter();
-        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Throwable)
+        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Gun)
         {
-            context.LastEquipment = (int)CharacterGlobals.Equipment.Throwable;
-            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Throwable;
+            context.LastEquipment = (int)CharacterGlobals.Equipment.Gun;
+            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Gun;
         }
     }
 
@@ -29,14 +29,14 @@ public class CharacterThrowableState : CharacterEquipmentBaseState
     {
         switch (context.Equipment)
         {
-            case 0:
-                SwitchState(factory.Gun());
-                break;
             case 1:
                 SwitchState(factory.Tool());
                 break;
             case 2:
                 SwitchState(factory.Consumable()); ;
+                break;
+            case 3:
+                SwitchState(factory.Throwable());
                 break;
         }
     }
@@ -45,8 +45,11 @@ public class CharacterThrowableState : CharacterEquipmentBaseState
 
     public override void OnFireDownAction(InputAction.CallbackContext context)
     {
-        Debug.Log("Throw!");
+        Debug.Log("Bang");
     }
 
-    public override void OnFireUpAction(InputAction.CallbackContext context) { }
+    public override void OnFireUpAction(InputAction.CallbackContext context)
+    {
+        Debug.Log("Click");
+    }
 }

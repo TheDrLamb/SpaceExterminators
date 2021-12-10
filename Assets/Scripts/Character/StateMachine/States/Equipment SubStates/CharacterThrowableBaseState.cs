@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterToolState : CharacterEquipmentBaseState 
+public class CharacterThrowableBaseState : CharacterEquipmentBaseState
 {
-    public CharacterToolState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
+    public CharacterThrowableBaseState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {
         base.Enter();
-        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Tool)
+        if (context.LastEquipment != (int)CharacterGlobals.Equipment.Throwable)
         {
-            context.LastEquipment = (int)CharacterGlobals.Equipment.Tool;
-            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Tool;
+            context.LastEquipment = (int)CharacterGlobals.Equipment.Throwable;
+            context.Anim_EquipmentState = (int)CharacterGlobals.Equipment.Throwable;
         }
     }
 
@@ -32,11 +32,11 @@ public class CharacterToolState : CharacterEquipmentBaseState
             case 0:
                 SwitchState(factory.Gun());
                 break;
+            case 1:
+                SwitchState(factory.Tool());
+                break;
             case 2:
                 SwitchState(factory.Consumable()); ;
-                break;
-            case 3:
-                SwitchState(factory.Throwable());
                 break;
         }
     }
@@ -45,7 +45,7 @@ public class CharacterToolState : CharacterEquipmentBaseState
 
     public override void OnFireDownAction(InputAction.CallbackContext context)
     {
-        Debug.Log("Swing!");
+        Debug.Log("Throw!");
     }
 
     public override void OnFireUpAction(InputAction.CallbackContext context) { }
