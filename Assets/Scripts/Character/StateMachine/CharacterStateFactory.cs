@@ -1,9 +1,11 @@
 ﻿public class CharacterStateFactory
 {
     CharacterStateMachine context;
+    CharacterEquipmentStateFactory equipmentFactory;
 
     public CharacterStateFactory(CharacterStateMachine _context) {
         context = _context;
+        equipmentFactory = new CharacterEquipmentStateFactory();
     }
 
     public CharacterBaseState Grounded() {
@@ -33,20 +35,20 @@
     }
 
     public CharacterBaseState Gun() {
-        return new CharacterGunBaseState(context, this);
+        return equipmentFactory.GetGunState(context,this);
     }
 
     public CharacterBaseState Tool()
     {
-        return new CharacterToolBaseState(context, this);
+        return equipmentFactory.GetToolState(context, this);
     }
 
     public CharacterBaseState Consumable()
     {
-        return new CharacterConsumableBaseState(context, this);
+        return equipmentFactory.GetConsumableState(context, this);
     }
     public CharacterBaseState Throwable()
     {
-        return new CharacterThrowableBaseState(context, this);
+        return equipmentFactory.GetThrowableState(context, this);
     }
 }
