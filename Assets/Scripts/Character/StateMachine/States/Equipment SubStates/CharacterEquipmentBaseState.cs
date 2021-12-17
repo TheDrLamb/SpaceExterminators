@@ -35,7 +35,7 @@ public abstract class CharacterEquipmentBaseState : CharacterBaseState
         context.SetFireAction(ActionType.Cancel, OnFireUpAction);
     }
 
-    public abstract void OnFireDownAction(InputAction.CallbackContext context);
+    public abstract void OnFireDownAction(InputAction.CallbackContext callback);
 
-    public abstract void OnFireUpAction(InputAction.CallbackContext context);
+    public abstract void OnFireUpAction(InputAction.CallbackContext callback);
 }

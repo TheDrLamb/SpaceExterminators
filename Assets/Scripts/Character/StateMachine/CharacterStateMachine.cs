@@ -74,6 +74,7 @@ public class CharacterStateMachine : MonoBehaviour
     //Equipment
     int equipment = 0;
     int lastEquipment = -1;
+    CharacterEquipment equipmentController;
 
     //State machine
     CharacterBaseState currentState;
@@ -121,11 +122,14 @@ public class CharacterStateMachine : MonoBehaviour
         }
     }
     public bool CanSwapEquipment { get { return canSwapEquipment; } set { canSwapEquipment = value; } }
+    public GunData Gun { get { return equipmentController.gunData; } }
+    public CharacterEquipment EquipmentController { get { return equipmentController; } }
     #endregion
 
     #region Enable and Disable
     private void Awake()
     {
+        equipmentController = GetComponent<CharacterEquipment>();
         InitializeGlobals();
         InitializeInput();
         InitializeStateMachine();
@@ -135,7 +139,6 @@ public class CharacterStateMachine : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         playerTargetRotation = lastPlayerTargetRotation = rigid.transform.rotation;
-
     }
 
     private void OnEnable()

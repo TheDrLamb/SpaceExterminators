@@ -43,10 +43,10 @@ public class CharacterToolBaseState : CharacterEquipmentBaseState
 
     public override void InitializeSubState() { }
 
-    public override void OnFireDownAction(InputAction.CallbackContext context)
+    public override void OnFireDownAction(InputAction.CallbackContext callback)
     {
         Debug.Log("Swing!");
     }
 
-    public override void OnFireUpAction(InputAction.CallbackContext context) { }
+    public override void OnFireUpAction(InputAction.CallbackContext callback) { }
 }

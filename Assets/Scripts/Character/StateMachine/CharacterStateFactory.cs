@@ -1,11 +1,9 @@
 ﻿public class CharacterStateFactory
 {
     CharacterStateMachine context;
-    CharacterEquipmentStateFactory equipmentFactory;
 
     public CharacterStateFactory(CharacterStateMachine _context) {
         context = _context;
-        equipmentFactory = new CharacterEquipmentStateFactory();
     }
 
     public CharacterBaseState Grounded() {
@@ -35,20 +33,47 @@
     }
 
     public CharacterBaseState Gun() {
-        return equipmentFactory.GetGunState(context,this);
+        return GetGunState();
     }
 
     public CharacterBaseState Tool()
     {
-        return equipmentFactory.GetToolState(context, this);
+        return GetToolState();
     }
 
     public CharacterBaseState Consumable()
     {
-        return equipmentFactory.GetConsumableState(context, this);
+        return GetConsumableState();
     }
     public CharacterBaseState Throwable()
     {
-        return equipmentFactory.GetThrowableState(context, this);
+        return GetThrowableState();
+    }
+
+    public CharacterGunBaseState GetGunState()
+    {
+        switch (context.Gun.type) {
+            case GunType.Automatic:
+                return new AutomaticFireGun(context, this);
+            case GunType.Single:
+                return new SingleFireGun(context, this);
+        }
+        //Default Path
+        return new CharacterGunBaseState(context, this);
+    }
+
+    public CharacterToolBaseState GetToolState()
+    {
+        return new CharacterToolBaseState(context, this);
+    }
+
+    public CharacterConsumableBaseState GetConsumableState()
+    {
+        return new CharacterConsumableBaseState(context, this);
+    }
+
+    public CharacterThrowableBaseState GetThrowableState()
+    {
+        return new CharacterThrowableBaseState(context, this);
     }
 }
