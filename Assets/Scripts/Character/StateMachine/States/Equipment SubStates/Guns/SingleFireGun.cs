@@ -45,7 +45,7 @@ public class SingleFireGun : CharacterGunBaseState
 
     public override void OnFireDownAction(InputAction.CallbackContext callback)
     {
-        context.EquipmentController.FireProjectile();
+        context.EquipmentController.GunTrigger();
     }
 
     public override void OnFireUpAction(InputAction.CallbackContext callback) { }
