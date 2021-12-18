@@ -55,6 +55,8 @@
         switch (context.Gun.type) {
             case GunType.Automatic:
                 return new AutomaticFireGun(context, this);
+            case GunType.Continuous:
+                return new AutomaticFireGun(context, this);
             case GunType.Single:
                 return new SingleFireGun(context, this);
         }

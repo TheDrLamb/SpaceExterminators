@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class AutomaticFireGun : CharacterGunBaseState
 {
-    public bool triggerDown = false;
     public AutomaticFireGun(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
@@ -22,8 +21,8 @@ public class AutomaticFireGun : CharacterGunBaseState
 
     public override void LogicUpdate() 
     {
-        if (triggerDown) {
-            context.EquipmentController.GunTrigger();
+        if (context.TriggerDown) {
+            context.EquipmentController.FireGun();
         }
     }
 
@@ -51,11 +50,11 @@ public class AutomaticFireGun : CharacterGunBaseState
 
     public override void OnFireDownAction(InputAction.CallbackContext callback)
     {
-        triggerDown = true;
+        context.TriggerDown = true;
     }
 
     public override void OnFireUpAction(InputAction.CallbackContext callback)
     {
-        triggerDown = false;
+        context.TriggerDown = false;
     }
 }

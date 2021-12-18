@@ -2234,6 +2234,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7753543260145612363, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: gunData.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260145612363, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: gunProjectile
       value: 
       objectReference: {fileID: 6639350068548514455, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}
@@ -2242,9 +2246,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1816664733}
     - target: {fileID: 7753543260145612363, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: gunData.fireSpeed
+      value: 2500
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260145612363, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: gunData.projectile
       value: 
-      objectReference: {fileID: 6639350068548514455, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}
+      objectReference: {fileID: 5464382313041149617, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}
+    - target: {fileID: 7753543260145612363, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: gunData.rateOfFire
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260145612363, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: gunData.fireDistance
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 7753543260145612366, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: m_Name
       value: CharacterController

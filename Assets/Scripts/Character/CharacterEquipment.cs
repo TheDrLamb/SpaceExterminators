@@ -6,20 +6,35 @@ using System.Threading.Tasks;
 
 public class CharacterEquipment : MonoBehaviour
 {
+    public Task currentTask;
+
     //Holds all of the equipment data for the character.
     public GunData gunData;
-    public Task fireTask;
 
-    public void GunTrigger()
+    public void FireGun()
     {
-        if (fireTask == null) fireTask = FireProjectile();
-        if (fireTask.IsCompleted) fireTask = FireProjectile();
+        if (gunData.type != GunType.Continuous)
+        {
+            if (currentTask == null) currentTask = FireProjectile();
+            else if (currentTask.IsCompleted) currentTask = FireProjectile();
+        }
+        else 
+        {
+            if (currentTask == null) currentTask = FireContinuous();
+            else if (currentTask.IsCompleted) currentTask = FireContinuous();
+        }
     }
 
     public async Task FireProjectile() {
         //Fire projectile
         Rigidbody newProjectile = Instantiate(gunData.projectile, gunData.firePoint.position, Quaternion.identity);
         newProjectile.AddForce(gunData.firePoint.forward * gunData.fireSpeed);
+        await Task.Delay((int)(gunData.rateOfFire * 1000));
+    }
+
+    public async Task FireContinuous() {
+        //Ray ray = new Ray(gunData.firePoint.position, Vector3.forward);
+        Debug.DrawRay(gunData.firePoint.position, gunData.firePoint.forward * gunData.fireDistance, Color.red, gunData.rateOfFire / 2, true);
         await Task.Delay((int)(gunData.rateOfFire * 1000));
     }
 }
@@ -30,9 +45,13 @@ public struct GunData
 {
     public GunType type;
     public Transform firePoint;
+    public float fireDistance;
     public Rigidbody projectile;
+    public int damage;
     public float rateOfFire;
     public float fireSpeed;
+    public ParticleSystem muzzleFlash;
+    public AudioClip fireSound;
 }
 #endregion
 

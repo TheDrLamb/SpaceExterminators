@@ -71,6 +71,9 @@ public class CharacterStateMachine : MonoBehaviour
     Action<InputAction.CallbackContext> onFire_Cancel;
     Action<InputAction.CallbackContext> onFire_Perform;
 
+    //Combat
+    bool triggerDown = false;
+
     //Equipment
     int equipment = 0;
     int lastEquipment = -1;
@@ -124,6 +127,7 @@ public class CharacterStateMachine : MonoBehaviour
     public bool CanSwapEquipment { get { return canSwapEquipment; } set { canSwapEquipment = value; } }
     public GunData Gun { get { return equipmentController.gunData; } }
     public CharacterEquipment EquipmentController { get { return equipmentController; } }
+    public bool TriggerDown { get { return triggerDown; } set { triggerDown = value; } }
     #endregion
 
     #region Enable and Disable
