@@ -5,7 +5,7 @@ public abstract class Character_CombatBaseState
 {
     protected Character_CombatStateMachine context;
     protected Character_CombatStateFactory factory;
-    public Character_CombatBaseState(Character_MovementStateMachine _context, Character_MovementStateFactory _factory)
+    public Character_CombatBaseState(Character_CombatStateMachine _context, Character_CombatStateFactory _factory)
     {
         context = _context;
         factory = _factory;
@@ -19,11 +19,16 @@ public abstract class Character_CombatBaseState
 
     public virtual void Exit() 
     {
+
+    }
+
+    public void Update() {
+        SwitchStateCheck();
     }
 
     public abstract void SwitchStateCheck();
 
-    protected void SwitchState(Character_MovementBaseState newState)
+    protected void SwitchState(Character_CombatBaseState newState)
     {
         Exit();
 

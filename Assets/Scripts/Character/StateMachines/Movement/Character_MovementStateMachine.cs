@@ -27,7 +27,7 @@ public class Character_MovementStateMachine : MonoBehaviour
     public float uprightSpringDamping = 5f;
 
     //Jumping
-    public float jumpForce = 100f;
+    public float jumpForce = 10f;
     public float gravityMultiplier = 3.0f;
     #endregion
 
@@ -40,8 +40,6 @@ public class Character_MovementStateMachine : MonoBehaviour
     int walkingHash;
     int sprintingHash;
     int crouchingHash;
-    int equipmentHash;
-    int anim_EquipmentState = -1;
     bool anim_Crouch = false;
 
     //Rotation
@@ -65,19 +63,6 @@ public class Character_MovementStateMachine : MonoBehaviour
     bool isCrouchPressed;
     bool isJumpPressed;
     Vector2 current_MousePosition;
-    bool canSwapEquipment;
-    //Combat Input Delegates
-    Action<InputAction.CallbackContext> onFire_Start;
-    Action<InputAction.CallbackContext> onFire_Cancel;
-    Action<InputAction.CallbackContext> onFire_Perform;
-
-    //Combat
-    bool triggerDown = false;
-
-    //Equipment
-    int equipment = 0;
-    int lastEquipment = -1;
-    Character_CombatStateMachine equipmentController;
 
     //State machine
     Character_MovementBaseState currentState;
@@ -99,20 +84,7 @@ public class Character_MovementStateMachine : MonoBehaviour
     public bool RequireNewJump { get { return requireNewJump; } set { requireNewJump = value; } }
     public float RigidbodyVelocityY { get { return rigid.velocity.y; } set { rigid.velocity = new Vector3(rigid.velocity.x, value, rigid.velocity.z); } }
     public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
-    public int Equipment { get { return equipment; } }
-    public int LastEquipment { get { return lastEquipment; } set { lastEquipment = value; } }
-    public int Anim_EquipmentState
-    {
-        get
-        {
-            return anim_EquipmentState;
-        }
-        set
-        {
-            anim_EquipmentState = value;
-            anim.SetInteger(equipmentHash, anim_EquipmentState);
-        }
-    }
+
     public bool Anim_Crouch {
         get
         {
@@ -124,16 +96,11 @@ public class Character_MovementStateMachine : MonoBehaviour
             anim.SetBool(crouchingHash, anim_Crouch);
         }
     }
-    public bool CanSwapEquipment { get { return canSwapEquipment; } set { canSwapEquipment = value; } }
-    public GunData Gun { get { return equipmentController.gunData; } }
-    public Character_CombatStateMachine EquipmentController { get { return equipmentController; } }
-    public bool TriggerDown { get { return triggerDown; } set { triggerDown = value; } }
     #endregion
 
     #region Enable and Disable
     private void Awake()
     {
-        equipmentController = GetComponent<Character_CombatStateMachine>();
         InitializeGlobals();
         InitializeInput();
         InitializeStateMachine();
@@ -182,7 +149,6 @@ public class Character_MovementStateMachine : MonoBehaviour
         walkingHash = Animator.StringToHash(CharacterGlobals.walkingString);
         sprintingHash = Animator.StringToHash(CharacterGlobals.walkingString);
         crouchingHash = Animator.StringToHash(CharacterGlobals.crouchingString);
-        equipmentHash = Animator.StringToHash(CharacterGlobals.equipmentString);
     }
 
     void InitializeInput()
@@ -208,14 +174,6 @@ public class Character_MovementStateMachine : MonoBehaviour
         input.CharacterControls.Crouch.started += OnCrouch;
         input.CharacterControls.Crouch.performed += OnCrouch;
         input.CharacterControls.Crouch.canceled += OnCrouch;
-
-        input.CharacterControls.EquipmentWheel.started += OnScroll;
-
-        input.CharacterControls.Equipment.performed += OnEquip;
-
-        input.CharacterControls.Fire.started += NullAction;
-        input.CharacterControls.Fire.canceled += NullAction;
-        input.CharacterControls.Fire.performed += NullAction;
     }
 
     void InitializeStateMachine() {
@@ -251,60 +209,6 @@ public class Character_MovementStateMachine : MonoBehaviour
     void OnCrouch(InputAction.CallbackContext context)
     {
         isCrouchPressed = context.ReadValueAsButton();
-    }
-
-    void OnScroll(InputAction.CallbackContext context) {
-        if (canSwapEquipment) 
-        {
-            int newEquipment = equipment - (int)context.ReadValue<float>();
-            if (newEquipment != equipment)
-            {
-                canSwapEquipment = false;
-                equipment = Utility.WrapAround(newEquipment, 0, 3);
-            }
-        }
-    }
-
-    void OnEquip(InputAction.CallbackContext context) {
-        if (canSwapEquipment)
-        {
-            int newEquipment = (int)context.ReadValue<float>() - 1;
-            if (newEquipment != equipment)
-            {
-                canSwapEquipment = false;
-                equipment = Utility.WrapAround(newEquipment, 0, 3);
-            }
-        }
-    }
-
-    void NullAction(InputAction.CallbackContext context) { 
-        
-    }
-    public void SetFireAction(ActionType _action, Action<InputAction.CallbackContext> _newAction) 
-    {
-        switch (_action) {
-            case ActionType.Start:
-                input.CharacterControls.Fire.started -= onFire_Start;
-                onFire_Start = _newAction;
-                input.CharacterControls.Fire.started += onFire_Start;
-                break;
-            case ActionType.Perform:
-                input.CharacterControls.Fire.performed -= onFire_Perform;
-                onFire_Perform = _newAction;
-                input.CharacterControls.Fire.performed += onFire_Perform;
-                break;
-            case ActionType.Cancel:
-                input.CharacterControls.Fire.canceled -= onFire_Cancel;
-                onFire_Cancel = _newAction;
-                input.CharacterControls.Fire.canceled += onFire_Cancel;
-                break;
-        }
-    }
-    #endregion
-
-    #region Animation Callbacks
-    public void EnableSwapEquipment() {
-        canSwapEquipment = true;
     }
     #endregion
 

@@ -58,20 +58,5 @@ public class CharacterWalkingState : Character_MovementBaseState
 
     public override void InitializeSubState() 
     {
-        switch (context.Equipment) {
-            case 0:
-                SetSubState(factory.Gun());
-                break;
-            case 1:
-                SetSubState(factory.Tool());
-                break;
-            case 2:
-                SetSubState(factory.Consumable());;
-                break;
-            case 3:
-                SetSubState(factory.Throwable());
-                break;
-        }
-        currentSubState.Enter();
     }
 }

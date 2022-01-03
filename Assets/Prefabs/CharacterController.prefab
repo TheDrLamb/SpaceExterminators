@@ -284,9 +284,9 @@ GameObject:
   - component: {fileID: 7753543260145612362}
   - component: {fileID: 7753543260145612367}
   - component: {fileID: 7753543260145612360}
-  - component: {fileID: 7753543260145612364}
   - component: {fileID: 7753543260145612365}
-  - component: {fileID: 7753543260145612363}
+  - component: {fileID: 1855937804521951487}
+  - component: {fileID: 8705395131389119451}
   m_Layer: 12
   m_Name: CharacterController
   m_TagString: Player
@@ -339,36 +339,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7753543260145612364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7753543260145612366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e630311287f6dbc40a8cfa0da43451d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  acceleration: 100
-  maxAcceleration: 200
-  maxSpeed: 10
-  sprintSpeed: 15
-  crouchSpeed: 5
-  rotationSpeed: 5
-  brakingForce: 5
-  mapLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  rideHeight: 1.25
-  rideSpringStrength: 150
-  rideSpringDamping: 5
-  rideDownFactor: 2
-  uprightSpringStrength: 500
-  uprightSpringDamping: 25
-  jumpForce: 5
-  gravityMultiplier: 5
 --- !u!95 &7753543260145612365
 Animator:
   serializedVersion: 3
@@ -388,7 +358,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7753543260145612363
+--- !u!114 &1855937804521951487
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -397,12 +367,49 @@ MonoBehaviour:
   m_GameObject: {fileID: 7753543260145612366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63a3c234576a2d24586d9e7a79a1d6c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 35d740e6ae635e84e9a3c8db06efe941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunType: 0
-  gunFirePoint: {fileID: 7753543259672714235}
-  gunProjectile: {fileID: 0}
+  gunData:
+    type: 0
+    firePoint: {fileID: 7753543259672714235}
+    fireDistance: 25
+    projectile: {fileID: 5464382313041149617, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}
+    damage: 1
+    rateOfFire: 1
+    fireSpeed: 500
+    muzzleFlash: {fileID: 0}
+    fireSound: {fileID: 0}
+--- !u!114 &8705395131389119451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7753543260145612366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b02a416eabe496448cbeb7856ed9b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceleration: 100
+  maxAcceleration: 200
+  maxSpeed: 10
+  sprintSpeed: 15
+  crouchSpeed: 5
+  rotationSpeed: 5
+  brakingForce: 5
+  mapLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  rideHeight: 1.25
+  rideSpringStrength: 150
+  rideSpringDamping: 5
+  rideDownFactor: 2
+  uprightSpringStrength: 100
+  uprightSpringDamping: 5
+  jumpForce: 10
+  gravityMultiplier: 3
 --- !u!1 &7753543260386780384
 GameObject:
   m_ObjectHideFlags: 0
