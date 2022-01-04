@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterStateMachine : MonoBehaviour
+public class Character_MovementStateMachine : MonoBehaviour
 {
     #region Adjustable Variables
     //Movement
@@ -27,7 +27,7 @@ public class CharacterStateMachine : MonoBehaviour
     public float uprightSpringDamping = 5f;
 
     //Jumping
-    public float jumpForce = 100f;
+    public float jumpForce = 10f;
     public float gravityMultiplier = 3.0f;
     #endregion
 
@@ -40,8 +40,6 @@ public class CharacterStateMachine : MonoBehaviour
     int walkingHash;
     int sprintingHash;
     int crouchingHash;
-    int equipmentHash;
-    int anim_EquipmentState = -1;
     bool anim_Crouch = false;
 
     //Rotation
@@ -65,21 +63,14 @@ public class CharacterStateMachine : MonoBehaviour
     bool isCrouchPressed;
     bool isJumpPressed;
     Vector2 current_MousePosition;
-    bool canSwapEquipment;
-    //Combat Input Delegates
-    Action<InputAction.CallbackContext> onFire;
-
-    //Equipment
-    int equipment = 0;
-    int lastEquipment = -1;
 
     //State machine
-    CharacterBaseState currentState;
-    CharacterStateFactory states;
+    Character_MovementBaseState currentState;
+    Character_MovementStateFactory states;
     #endregion
 
     #region Getters and Setters
-    public CharacterBaseState CurrentState { get { return currentState; } set { currentState = value; } }
+    public Character_MovementBaseState CurrentState { get { return currentState; } set { currentState = value; } }
     public bool IsJumpPressed { get { return isJumpPressed; } }
     public Rigidbody Rigid { get { return rigid; } }
     public bool IsGrounded { get { return isGrounded; } set { isGrounded = value; } }
@@ -93,20 +84,7 @@ public class CharacterStateMachine : MonoBehaviour
     public bool RequireNewJump { get { return requireNewJump; } set { requireNewJump = value; } }
     public float RigidbodyVelocityY { get { return rigid.velocity.y; } set { rigid.velocity = new Vector3(rigid.velocity.x, value, rigid.velocity.z); } }
     public Vector3 RigidbodyPlanarVelocity { get { return new Vector3(rigid.velocity.x, 0, rigid.velocity.z); } }
-    public int Equipment { get { return equipment; } }
-    public int LastEquipment { get { return lastEquipment; } set { lastEquipment = value; } }
-    public int Anim_EquipmentState
-    {
-        get
-        {
-            return anim_EquipmentState;
-        }
-        set
-        {
-            anim_EquipmentState = value;
-            anim.SetInteger(equipmentHash, anim_EquipmentState);
-        }
-    }
+
     public bool Anim_Crouch {
         get
         {
@@ -118,7 +96,6 @@ public class CharacterStateMachine : MonoBehaviour
             anim.SetBool(crouchingHash, anim_Crouch);
         }
     }
-    public bool CanSwapEquipment { get { return canSwapEquipment; } set { canSwapEquipment = value; } }
     #endregion
 
     #region Enable and Disable
@@ -133,7 +110,6 @@ public class CharacterStateMachine : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         playerTargetRotation = lastPlayerTargetRotation = rigid.transform.rotation;
-
     }
 
     private void OnEnable()
@@ -173,7 +149,6 @@ public class CharacterStateMachine : MonoBehaviour
         walkingHash = Animator.StringToHash(CharacterGlobals.walkingString);
         sprintingHash = Animator.StringToHash(CharacterGlobals.walkingString);
         crouchingHash = Animator.StringToHash(CharacterGlobals.crouchingString);
-        equipmentHash = Animator.StringToHash(CharacterGlobals.equipmentString);
     }
 
     void InitializeInput()
@@ -199,18 +174,10 @@ public class CharacterStateMachine : MonoBehaviour
         input.CharacterControls.Crouch.started += OnCrouch;
         input.CharacterControls.Crouch.performed += OnCrouch;
         input.CharacterControls.Crouch.canceled += OnCrouch;
-
-        input.CharacterControls.EquipmentWheel.started += OnScroll;
-
-        input.CharacterControls.Equipment.performed += OnEquip;
-
-        input.CharacterControls.Fire.started += NullAction;
-        input.CharacterControls.Fire.canceled += NullAction;
-        input.CharacterControls.Fire.performed += NullAction;
     }
 
     void InitializeStateMachine() {
-        states = new CharacterStateFactory(this);
+        states = new Character_MovementStateFactory(this);
         currentState = states.Grounded();
         currentState.Enter();
     }
@@ -242,49 +209,6 @@ public class CharacterStateMachine : MonoBehaviour
     void OnCrouch(InputAction.CallbackContext context)
     {
         isCrouchPressed = context.ReadValueAsButton();
-    }
-
-    void OnScroll(InputAction.CallbackContext context) {
-        if (canSwapEquipment) 
-        {
-            int newEquipment = equipment - (int)context.ReadValue<float>();
-            if (newEquipment != equipment)
-            {
-                canSwapEquipment = false;
-                equipment = Utility.WrapAround(newEquipment, 0, 3);
-            }
-        }
-    }
-
-    void OnEquip(InputAction.CallbackContext context) {
-        if (canSwapEquipment)
-        {
-            int newEquipment = (int)context.ReadValue<float>() - 1;
-            if (newEquipment != equipment)
-            {
-                canSwapEquipment = false;
-                equipment = Utility.WrapAround(newEquipment, 0, 3);
-            }
-        }
-    }
-
-    void NullAction(InputAction.CallbackContext context) { 
-        
-    }
-    public void SetFireActions(Action<InputAction.CallbackContext> _newAction) {
-        input.CharacterControls.Fire.started -= onFire;
-        input.CharacterControls.Fire.performed -= onFire;
-        input.CharacterControls.Fire.canceled -= onFire;
-        onFire = _newAction;
-        input.CharacterControls.Fire.started += onFire;
-        input.CharacterControls.Fire.performed += onFire;
-        input.CharacterControls.Fire.canceled += onFire;
-    }
-    #endregion
-
-    #region Animation Callbacks
-    public void EnableSwapEquipment() {
-        canSwapEquipment = true;
     }
     #endregion
 
@@ -349,4 +273,10 @@ public class CharacterStateMachine : MonoBehaviour
         rigid.AddTorque((rotAxis * (rotRadians * uprightSpringStrength)) - (rigid.angularVelocity * uprightSpringDamping));
     }
     #endregion
+}
+
+public enum ActionType { 
+    Start,
+    Cancel,
+    Perform
 }

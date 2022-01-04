@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterGroundedState : CharacterBaseState
+public class CharacterGroundedState : Character_MovementBaseState
 {
-    public CharacterGroundedState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) 
+    public CharacterGroundedState(Character_MovementStateMachine _context, Character_MovementStateFactory _factory) : base(_context, _factory) 
     {
         isRootState = true;
         InitializeSubState();

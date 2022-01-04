@@ -1,14 +1,14 @@
-﻿public abstract class CharacterBaseState
+﻿public abstract class Character_MovementBaseState
 {
-    protected CharacterStateMachine context;
-    protected CharacterStateFactory factory;
+    protected Character_MovementStateMachine context;
+    protected Character_MovementStateFactory factory;
 
-    protected CharacterBaseState currentSuperState;
-    protected CharacterBaseState currentSubState;
+    protected Character_MovementBaseState currentSuperState;
+    protected Character_MovementBaseState currentSubState;
 
     protected bool isRootState = false;
 
-    public CharacterBaseState(CharacterStateMachine _context, CharacterStateFactory _factory)
+    public Character_MovementBaseState(Character_MovementStateMachine _context, Character_MovementStateFactory _factory)
     {
         context = _context;
         factory = _factory;
@@ -32,7 +32,7 @@
         }
     }
 
-    protected void SwitchState(CharacterBaseState newState)
+    protected void SwitchState(Character_MovementBaseState newState)
     {
         Exit();
 
@@ -48,12 +48,12 @@
         }
     }
 
-    protected void SetSuperState(CharacterBaseState newSuperState) 
+    protected void SetSuperState(Character_MovementBaseState newSuperState) 
     {
         currentSuperState = newSuperState;
     }
 
-    protected void SetSubState(CharacterBaseState newSubState) 
+    protected void SetSubState(Character_MovementBaseState newSubState) 
     {
         currentSubState = newSubState;
         currentSubState.SetSuperState(this);

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterJumpingState : CharacterBaseState
+public class CharacterJumpingState : Character_MovementBaseState
 {
-    public CharacterJumpingState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory)
+    public CharacterJumpingState(Character_MovementStateMachine _context, Character_MovementStateFactory _factory) : base(_context, _factory)
     {
         isRootState = true;
         InitializeSubState();

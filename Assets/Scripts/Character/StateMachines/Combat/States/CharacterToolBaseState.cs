@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class CharacterToolState : CharacterBaseState
+public class CharacterToolBaseState : Character_CombatBaseState 
 {
-    public CharacterToolState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
+    public CharacterToolBaseState(Character_CombatStateMachine _context, Character_CombatStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {
+        base.Enter();
         if (context.LastEquipment != (int)CharacterGlobals.Equipment.Tool)
         {
             context.LastEquipment = (int)CharacterGlobals.Equipment.Tool;
@@ -16,12 +18,6 @@ public class CharacterToolState : CharacterBaseState
     }
 
     public override void Exit() { }
-
-    public override void LogicUpdate() { }
-
-    public override void PhysicsUpdate() { }
-
-    public override void VisualUpdate() { }
 
     public override void SwitchStateCheck()
     {
@@ -39,5 +35,10 @@ public class CharacterToolState : CharacterBaseState
         }
     }
 
-    public override void InitializeSubState() { }
+    public override void OnFireDownAction(InputAction.CallbackContext callback)
+    {
+        Debug.Log("Swing!");
+    }
+
+    public override void OnFireUpAction(InputAction.CallbackContext callback) { }
 }

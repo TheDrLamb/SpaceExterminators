@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class CharacterThrowableState : CharacterBaseState
+public class CharacterThrowableBaseState : Character_CombatBaseState
 {
-    public CharacterThrowableState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory) { }
+    public CharacterThrowableBaseState(Character_CombatStateMachine _context, Character_CombatStateFactory _factory) : base(_context, _factory) { }
 
     public override void Enter()
     {
+        base.Enter();
         if (context.LastEquipment != (int)CharacterGlobals.Equipment.Throwable)
         {
             context.LastEquipment = (int)CharacterGlobals.Equipment.Throwable;
@@ -16,12 +18,6 @@ public class CharacterThrowableState : CharacterBaseState
     }
 
     public override void Exit() { }
-
-    public override void LogicUpdate() { }
-
-    public override void PhysicsUpdate() { }
-
-    public override void VisualUpdate() { }
 
     public override void SwitchStateCheck()
     {
@@ -39,5 +35,10 @@ public class CharacterThrowableState : CharacterBaseState
         }
     }
 
-    public override void InitializeSubState() { }
+    public override void OnFireDownAction(InputAction.CallbackContext callback)
+    {
+        Debug.Log("Throw!");
+    }
+
+    public override void OnFireUpAction(InputAction.CallbackContext callback) { }
 }

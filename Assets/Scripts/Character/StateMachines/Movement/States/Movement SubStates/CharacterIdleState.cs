@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterIdleState : CharacterBaseState
+public class CharacterIdleState : Character_MovementBaseState
 {
-    public CharacterIdleState(CharacterStateMachine _context, CharacterStateFactory _factory) : base(_context, _factory)
+    public CharacterIdleState(Character_MovementStateMachine _context, Character_MovementStateFactory _factory) : base(_context, _factory)
     {
         InitializeSubState();
     }
 
-    public override void Enter() { }
+    public override void Enter() {
+        context.OldMove = Vector3.zero;
+        context.OldGoalVelocity = Vector3.zero;
+    }
 
     public override void Exit() { }
 
@@ -47,21 +50,5 @@ public class CharacterIdleState : CharacterBaseState
 
     public override void InitializeSubState()
     {
-        switch (context.Equipment)
-        {
-            case 0:
-                SetSubState(factory.Gun());
-                break;
-            case 1:
-                SetSubState(factory.Tool());
-                break;
-            case 2:
-                SetSubState(factory.Consumable()); ;
-                break;
-            case 3:
-                SetSubState(factory.Throwable());
-                break;
-        }
-        currentSubState.Enter();
     }
 }
