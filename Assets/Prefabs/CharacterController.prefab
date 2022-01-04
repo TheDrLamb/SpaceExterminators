@@ -285,8 +285,8 @@ GameObject:
   - component: {fileID: 7753543260145612367}
   - component: {fileID: 7753543260145612360}
   - component: {fileID: 7753543260145612365}
-  - component: {fileID: 1855937804521951487}
   - component: {fileID: 8705395131389119451}
+  - component: {fileID: 4630841792200528481}
   m_Layer: 12
   m_Name: CharacterController
   m_TagString: Player
@@ -358,28 +358,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1855937804521951487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7753543260145612366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35d740e6ae635e84e9a3c8db06efe941, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunData:
-    type: 0
-    firePoint: {fileID: 7753543259672714235}
-    fireDistance: 25
-    projectile: {fileID: 5464382313041149617, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}
-    damage: 1
-    rateOfFire: 1
-    fireSpeed: 500
-    muzzleFlash: {fileID: 0}
-    fireSound: {fileID: 0}
 --- !u!114 &8705395131389119451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +388,26 @@ MonoBehaviour:
   uprightSpringDamping: 5
   jumpForce: 10
   gravityMultiplier: 3
+--- !u!114 &4630841792200528481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7753543260145612366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c963c2b369e9dd64ea13ffb89436029e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Equipment:
+  - {fileID: 11400000, guid: 91248d76ee63f9247a01b888e1848f77, type: 2}
+  - {fileID: 11400000, guid: 3c3319b54e3bc3b46ac2bbdd1c3e0261, type: 2}
+  - {fileID: 11400000, guid: 91248d76ee63f9247a01b888e1848f77, type: 2}
+  - {fileID: 11400000, guid: 3c3319b54e3bc3b46ac2bbdd1c3e0261, type: 2}
+  - {fileID: 11400000, guid: 91248d76ee63f9247a01b888e1848f77, type: 2}
+  canSwapEquipment: 1
+  equipment: -1
 --- !u!1 &7753543260386780384
 GameObject:
   m_ObjectHideFlags: 0

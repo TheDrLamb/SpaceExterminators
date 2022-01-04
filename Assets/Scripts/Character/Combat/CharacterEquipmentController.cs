@@ -5,17 +5,14 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine.InputSystem;
 
-public class Character_CombatStateMachine : MonoBehaviour
+public class CharacterEquipmentController : MonoBehaviour
 {
     #region Public Variables
     public Task currentTask;
-    public GunData gunData;    //Holds all of the equipment data for the character.
+    public Equipment_ScriptableObject[] Equipment;
     #endregion
 
     #region Private Variables
-    //State Machine
-    Character_CombatBaseState currentState;
-    Character_CombatStateFactory states;
 
     //Input
     CharacterControllerInput input;
@@ -26,8 +23,7 @@ public class Character_CombatStateMachine : MonoBehaviour
     int anim_EquipmentState = -1;
 
     //Combat Input Logic
-    bool triggerDown = false;
-    public bool canSwapEquipment;
+    public bool canSwapEquipment = true;
 
     //Combat Input Delegates
     Action<InputAction.CallbackContext> onFire_Start;
@@ -35,14 +31,11 @@ public class Character_CombatStateMachine : MonoBehaviour
     Action<InputAction.CallbackContext> onFire_Perform;
 
     //Equipment
-    int equipment = 0;
-    int lastEquipment = -1;
+    public int equipment = -1;
+
     #endregion
 
     #region Getters and Setters
-    public Character_CombatBaseState CurrentState { get { return currentState; } set { currentState = value; } }
-    public int Equipment { get { return equipment; } }
-    public int LastEquipment { get { return lastEquipment; } set { lastEquipment = value; } }
     public int Anim_EquipmentState
     {
         get
@@ -55,8 +48,6 @@ public class Character_CombatStateMachine : MonoBehaviour
             anim.SetInteger(equipmentHash, anim_EquipmentState);
         }
     }
-    public bool CanSwapEquipment { get { return canSwapEquipment; } set { canSwapEquipment = value; } }
-    public bool TriggerDown { get { return triggerDown; } set { triggerDown = value; } }
     #endregion
 
     #region Initializing
@@ -64,7 +55,11 @@ public class Character_CombatStateMachine : MonoBehaviour
     {
         InitializeGlobals();
         InitializeInput();
-        InitializeStateMachine();
+    }
+
+    private void Start()
+    {
+        SwitchEquipment(0);
     }
     void InitializeGlobals()
     {
@@ -84,13 +79,6 @@ public class Character_CombatStateMachine : MonoBehaviour
         input.CharacterControls.Fire.canceled += NullAction;
         input.CharacterControls.Fire.performed += NullAction;
     }
-
-    void InitializeStateMachine()
-    {
-        states = new Character_CombatStateFactory(this);
-        currentState = states.Gun();
-        currentState.Enter();
-    }
     #endregion
 
     #region Enable and Disable
@@ -105,13 +93,6 @@ public class Character_CombatStateMachine : MonoBehaviour
     }
     #endregion
 
-    #region Update
-    public void Update()
-    {
-        currentState.Update();
-    }
-    #endregion
-
     #region Animation Callbacks
     public void EnableSwapEquipment()
     {
@@ -122,26 +103,30 @@ public class Character_CombatStateMachine : MonoBehaviour
     #region Input Events
     void OnScroll(InputAction.CallbackContext context)
     {
-        if (canSwapEquipment)
-        {
-            int newEquipment = equipment - (int)context.ReadValue<float>();
-            if (newEquipment != equipment)
-            {
-                canSwapEquipment = false;
-                equipment = Utility.WrapAround(newEquipment, 0, 3);
-            }
-        }
+        int newEquipment = equipment - (int)context.ReadValue<float>();
+        SwitchEquipment(Utility.WrapAround(newEquipment, 0, 4));
     }
 
     void OnEquip(InputAction.CallbackContext context)
     {
-        if (canSwapEquipment)
+        int newEquipment = (int)context.ReadValue<float>() - 1;
+        SwitchEquipment(newEquipment);
+    }
+
+    public void SwitchEquipment(int _newEquipment)
+    {
+        if (canSwapEquipment && _newEquipment != equipment)
         {
-            int newEquipment = (int)context.ReadValue<float>() - 1;
-            if (newEquipment != equipment)
-            {
-                canSwapEquipment = false;
-                equipment = Utility.WrapAround(newEquipment, 0, 3);
+            canSwapEquipment = false;
+            equipment = _newEquipment;
+            //Get Equipment at index _newEquipment
+            if (Equipment[equipment] != null) {
+                //Set the Animation state to the corresponding type value
+                anim_EquipmentState = (int)Equipment[equipment].ID;
+                anim.SetInteger(equipmentHash, anim_EquipmentState);
+                //Assign Action Callbacks
+                SetFireAction(ActionType.Perform, Equipment[equipment].OnFireDownAction);
+                SetFireAction(ActionType.Cancel, Equipment[equipment].OnFireUpAction);
             }
         }
     }
@@ -175,6 +160,8 @@ public class Character_CombatStateMachine : MonoBehaviour
     #endregion
 
     #region Gun Actions
+    /*
+
     public void FireGun()
     {
         if (gunData.type != GunType.Continuous)
@@ -201,6 +188,8 @@ public class Character_CombatStateMachine : MonoBehaviour
         Debug.DrawRay(gunData.firePoint.position, gunData.firePoint.forward * gunData.fireDistance, Color.red, gunData.rateOfFire / 2, true);
         await Task.Delay((int)(gunData.rateOfFire * 1000));
     }
+
+    */
     #endregion
 }
 
