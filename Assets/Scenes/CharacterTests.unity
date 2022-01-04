@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 146339628}
-  smoothSpeed: 0.75
+  smoothSpeed: 0.6
   cameraOffset: {x: 0, y: 14, z: -10}
 --- !u!1 &81515514
 GameObject:
@@ -2265,5 +2265,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterController
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8705395131389119451, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: jumpForce
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7753543260145612363, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+    - {fileID: 7753543260145612364, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}

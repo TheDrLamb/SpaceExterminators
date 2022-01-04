@@ -12,6 +12,8 @@ public class CharacterCrouchIdleState : Character_MovementBaseState
     public override void Enter()
     {
         context.Anim_Crouch = true;
+        context.OldMove = Vector3.zero;
+        context.OldGoalVelocity = Vector3.zero;
     }
 
     public override void Exit()

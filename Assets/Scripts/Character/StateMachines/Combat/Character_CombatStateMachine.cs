@@ -153,7 +153,6 @@ public class Character_CombatStateMachine : MonoBehaviour
 
     public void SetFireAction(ActionType _action, Action<InputAction.CallbackContext> _newAction)
     {
-        Debug.Log("Set Fire Actions");
         switch (_action)
         {
             case ActionType.Start:

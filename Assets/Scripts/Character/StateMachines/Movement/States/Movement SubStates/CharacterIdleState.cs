@@ -9,7 +9,10 @@ public class CharacterIdleState : Character_MovementBaseState
         InitializeSubState();
     }
 
-    public override void Enter() { }
+    public override void Enter() {
+        context.OldMove = Vector3.zero;
+        context.OldGoalVelocity = Vector3.zero;
+    }
 
     public override void Exit() { }
 
