@@ -21,7 +21,7 @@ public class Equipment_ScriptableObject : ScriptableObject
     public async Task PerformAction()
     {
 
-        Debug.Log("Start!");
+        Debug.Log($"{Name}: Start!");
         await Task.Delay((int)(1000));
         if (repeatAction && triggerDown) await PerformAction();
     }

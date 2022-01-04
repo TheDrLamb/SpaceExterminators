@@ -251,7 +251,7 @@ public class @CharacterControllerInput : IInputActionCollection, IDisposable
                     ""id"": ""b1b719da-94fc-4789-8add-2c84fd2e59dd"",
                     ""path"": ""<Keyboard>/5"",
                     ""interactions"": """",
-                    ""processors"": ""Clamp(min=4,max=4)"",
+                    ""processors"": ""Clamp(min=5,max=5)"",
                     ""groups"": """",
                     ""action"": ""Equipment"",
                     ""isComposite"": false,
