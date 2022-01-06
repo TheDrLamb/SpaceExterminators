@@ -17,7 +17,7 @@ public class Base_Gun_ScriptableObject : Base_Equipment_ScriptableObject
     protected Transform FirePoint { get { return firePoint; } set { firePoint = value; } }
     public float RateOfFire
     {
-        get { return 1 / RoundsPerMinute; }
+        get { return 1.0f / RoundsPerMinute; }
     }
     //Muzzle Flair
     //Sound

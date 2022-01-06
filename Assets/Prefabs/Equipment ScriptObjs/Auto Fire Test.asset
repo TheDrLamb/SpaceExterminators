@@ -17,5 +17,5 @@ MonoBehaviour:
   Model: {fileID: 0}
   Texture: {fileID: 0}
   Damage: 1
-  RoundsPerMinute: 1
+  RoundsPerMinute: 2
   Projectile: {fileID: 0}

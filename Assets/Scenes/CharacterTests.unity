@@ -2193,6 +2193,14 @@ PrefabInstance:
       propertyPath: canSwapEquipment
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4630841792200528481, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: Equipment.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4630841792200528481, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: Equipment.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 93bbf4f118c7f6b45be8a09d1a0e0cec, type: 2}
     - target: {fileID: 7753543260145612362, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: m_RootOrder
       value: 3
