@@ -9,7 +9,7 @@ public class CharacterEquipmentController : MonoBehaviour
 {
     #region Public Variables
     public Task currentTask;
-    public Equipment_ScriptableObject[] Equipment;
+    public Base_Equipment_ScriptableObject[] Equipment;
     #endregion
 
     #region Private Variables
@@ -122,7 +122,7 @@ public class CharacterEquipmentController : MonoBehaviour
             //Get Equipment at index _newEquipment
             if (Equipment[equipment] != null) {
                 //Set the Animation state to the corresponding type value
-                anim_EquipmentState = (int)Equipment[equipment].ID;
+                anim_EquipmentState = (int)Equipment[equipment].Type;
                 anim.SetInteger(equipmentHash, anim_EquipmentState);
                 //Assign Action Callbacks
                 SetFireAction(ActionType.Perform, Equipment[equipment].OnFireDownAction);
