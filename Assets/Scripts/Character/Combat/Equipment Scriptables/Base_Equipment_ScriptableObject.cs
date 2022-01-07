@@ -9,8 +9,9 @@ public class Base_Equipment_ScriptableObject : ScriptableObject
     Task currentTask;
     protected bool triggerDown;
 
-    public Base_Equipment_ScriptableObject() { }
+    public virtual void Initialize(){}
 
+    //[NOTE] -> Pass the fire location through the action to the Task?
     public virtual void OnFireDownAction(InputAction.CallbackContext callback) 
     {
         triggerDown = true;
@@ -28,13 +29,3 @@ public class Base_Equipment_ScriptableObject : ScriptableObject
         triggerDown = false;
     }
 }
-
-
-/*
-public virtual async Task PerformAction()
-{
-    Debug.Log($"{Name}: Start!");
-    await Task.Delay((int)(1000));
-    if (repeatAction && triggerDown) await PerformAction();
-}
-*/

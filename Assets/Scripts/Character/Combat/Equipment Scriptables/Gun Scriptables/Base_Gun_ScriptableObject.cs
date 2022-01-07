@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
 public class Base_Gun_ScriptableObject : Base_Equipment_ScriptableObject
-{
-    public Base_Gun_ScriptableObject() : base() { }
+{ 
 
     //Model
     public Mesh Model;

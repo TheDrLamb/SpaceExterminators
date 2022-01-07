@@ -2,13 +2,11 @@
 using UnityEngine.InputSystem;
 using System.Threading.Tasks;
 
-[CreateAssetMenu(fileName = "EquipmentBase", menuName = "ScriptableObjects/Equipment/Guns/ContinuousFire", order = 2)]
-public class ContinuousFire : Base_Gun_ScriptableObject
+[CreateAssetMenu(fileName = "New Gun", menuName = "ScriptableObjects/Equipment/Guns/ContinuousFire", order = 2)]
+public class ContinuousFire_ScriptableObject : Base_Gun_ScriptableObject
 {
     //Projectile
     public GameObject Projectile;
-
-    public ContinuousFire() : base() { }
 
     public override void OnFireDownAction(InputAction.CallbackContext callback)
     {

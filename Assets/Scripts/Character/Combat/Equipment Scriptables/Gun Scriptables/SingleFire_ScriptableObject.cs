@@ -2,13 +2,11 @@
 using UnityEngine.InputSystem;
 using System.Threading.Tasks;
 
-[CreateAssetMenu(fileName = "EquipmentBase", menuName = "ScriptableObjects/Equipment/Guns/Automatic Fire", order = 1)]
-public class AutomaticFire : Base_Gun_ScriptableObject
+[CreateAssetMenu(fileName = "New Gun", menuName = "ScriptableObjects/Equipment/Guns/Single Fire", order = 0)]
+public class SingleFire_ScriptableObject : Base_Gun_ScriptableObject
 {
     //Projectile
     public GameObject Projectile;
-
-    public AutomaticFire() : base() { }
 
     public override void OnFireDownAction(InputAction.CallbackContext callback)
     {
@@ -19,7 +17,6 @@ public class AutomaticFire : Base_Gun_ScriptableObject
     {
         Debug.Log($"{Name}: Fire for {Damage}!"); // Fire Projectile Here
         await Task.Delay((int)(1000 * RateOfFire));
-        if (triggerDown) await PerformAction();
     }
 
     public override void OnFireUpAction(InputAction.CallbackContext callback)

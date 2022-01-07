@@ -55,6 +55,7 @@ public class CharacterEquipmentController : MonoBehaviour
     {
         InitializeGlobals();
         InitializeInput();
+        InitializeEquipment();
     }
 
     private void Start()
@@ -78,6 +79,12 @@ public class CharacterEquipmentController : MonoBehaviour
         input.CharacterControls.Fire.started += NullAction;
         input.CharacterControls.Fire.canceled += NullAction;
         input.CharacterControls.Fire.performed += NullAction;
+    }
+
+    void InitializeEquipment() {
+        foreach (Base_Equipment_ScriptableObject equip in Equipment) {
+            equip.Initialize();
+        }
     }
     #endregion
 
@@ -158,79 +165,4 @@ public class CharacterEquipmentController : MonoBehaviour
         }
     }
     #endregion
-
-    #region Gun Actions
-    /*
-
-    public void FireGun()
-    {
-        if (gunData.type != GunType.Continuous)
-        {
-            if (currentTask == null) currentTask = FireProjectile();
-            else if (currentTask.IsCompleted) currentTask = FireProjectile();
-        }
-        else 
-        {
-            if (currentTask == null) currentTask = FireContinuous();
-            else if (currentTask.IsCompleted) currentTask = FireContinuous();
-        }
-    }
-
-    public async Task FireProjectile() {
-        //Fire projectile
-        Rigidbody newProjectile = Instantiate(gunData.projectile, gunData.firePoint.position, Quaternion.identity);
-        newProjectile.AddForce(gunData.firePoint.forward * gunData.fireSpeed);
-        await Task.Delay((int)(gunData.rateOfFire * 1000));
-    }
-
-    public async Task FireContinuous() {
-        //Ray ray = new Ray(gunData.firePoint.position, Vector3.forward);
-        Debug.DrawRay(gunData.firePoint.position, gunData.firePoint.forward * gunData.fireDistance, Color.red, gunData.rateOfFire / 2, true);
-        await Task.Delay((int)(gunData.rateOfFire * 1000));
-    }
-
-    */
-    #endregion
 }
-
-#region Gun
-[Serializable]
-public struct GunData
-{
-    public GunType type;
-    public Transform firePoint;
-    public float fireDistance;
-    public Rigidbody projectile;
-    public int damage;
-    public float rateOfFire;
-    public float fireSpeed;
-    public ParticleSystem muzzleFlash;
-    public AudioClip fireSound;
-}
-#endregion
-
-#region Type Enums
-//[NOTE] - > Later in developement replace the enum with actual equipment names
-//              For now just deliniate by behaviors. 
-public enum GunType
-{
-    Single,
-    Automatic,
-    Continuous
-}
-
-public enum ToolType
-{
-    Tool
-}
-
-public enum ThrowType
-{
-    Throw
-}
-
-public enum ConsumableType
-{
-    Drink
-}
-#endregion

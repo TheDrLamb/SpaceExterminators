@@ -2201,6 +2201,18 @@ PrefabInstance:
       propertyPath: Equipment.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 93bbf4f118c7f6b45be8a09d1a0e0cec, type: 2}
+    - target: {fileID: 4630841792200528481, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: Equipment.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d2f2f892717d6f4c93123fc4f330e89, type: 2}
+    - target: {fileID: 4630841792200528481, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: Equipment.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: ae399191814734541bd4b241888612d6, type: 2}
+    - target: {fileID: 4630841792200528481, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: Equipment.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: fcece9faf186b9c47a574e3ef6992d55, type: 2}
     - target: {fileID: 7753543260145612362, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: m_RootOrder
       value: 3
