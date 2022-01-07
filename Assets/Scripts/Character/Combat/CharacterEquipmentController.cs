@@ -23,6 +23,7 @@ public class CharacterEquipmentController : MonoBehaviour
     int anim_EquipmentState = -1;
 
     //Combat Input Logic
+    public float equipmentSwapTimer = 1.0f;
     public bool canSwapEquipment = true;
 
     //Combat Input Delegates
@@ -101,8 +102,9 @@ public class CharacterEquipmentController : MonoBehaviour
     #endregion
 
     #region Animation Callbacks
-    public void EnableSwapEquipment()
+    public async Task EquipmentSwapTimer() 
     {
+        await Task.Delay((int)(1000 * equipmentSwapTimer));
         canSwapEquipment = true;
     }
     #endregion
@@ -134,6 +136,7 @@ public class CharacterEquipmentController : MonoBehaviour
                 //Assign Action Callbacks
                 SetFireAction(ActionType.Perform, Equipment[equipment].OnFireDownAction);
                 SetFireAction(ActionType.Cancel, Equipment[equipment].OnFireUpAction);
+                if (currentTask == null || currentTask.IsCompleted) currentTask = EquipmentSwapTimer();
             }
         }
     }
