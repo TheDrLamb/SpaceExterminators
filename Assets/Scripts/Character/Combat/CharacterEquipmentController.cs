@@ -8,7 +8,9 @@ using UnityEngine.InputSystem;
 public class CharacterEquipmentController : MonoBehaviour
 {
     #region Public Variables
+    public float equipmentSwapTimer = 1.0f;
     public Task currentTask;
+    public GameObject[] StandIns;
     public Base_Equipment_ScriptableObject[] Equipment;
     #endregion
 
@@ -20,10 +22,9 @@ public class CharacterEquipmentController : MonoBehaviour
     //Animation
     Animator anim;
     int equipmentHash;
-    int anim_EquipmentState = -1;
+    public int anim_EquipmentState = -1;
 
     //Combat Input Logic
-    public float equipmentSwapTimer = 1.0f;
     public bool canSwapEquipment = true;
 
     //Combat Input Delegates
@@ -32,7 +33,7 @@ public class CharacterEquipmentController : MonoBehaviour
     Action<InputAction.CallbackContext> onFire_Perform;
 
     //Equipment
-    public int equipment = -1;
+    int equipment = -1;
 
     #endregion
 
@@ -83,8 +84,15 @@ public class CharacterEquipmentController : MonoBehaviour
     }
 
     void InitializeEquipment() {
-        foreach (Base_Equipment_ScriptableObject equip in Equipment) {
+        for (int i = 0; i < Equipment.Length; i++)
+        {
+            Base_Equipment_ScriptableObject equip = Equipment[i];
             equip.Initialize();
+            if (i <= 2) {
+                //Set the Model and Material for Equipment 1, 2, (and 3 if it exists)
+                StandIns[i].GetComponent<MeshFilter>().mesh = equip.Model;
+                StandIns[i].GetComponent<MeshRenderer>().material = equip.Texture;
+            }
         }
     }
     #endregion
@@ -131,6 +139,10 @@ public class CharacterEquipmentController : MonoBehaviour
             //Get Equipment at index _newEquipment
             if (Equipment[equipment] != null) {
                 //Set the Animation state to the corresponding type value
+                if (equipment >= 2) {
+                    StandIns[2].GetComponent<MeshFilter>().mesh = Equipment[equipment].Model;
+                    StandIns[2].GetComponent<MeshRenderer>().material = Equipment[equipment].Texture;
+                }
                 anim_EquipmentState = (int)Equipment[equipment].Type;
                 anim.SetInteger(equipmentHash, anim_EquipmentState);
                 //Assign Action Callbacks

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wrench
   Type: 1
-  Model: {fileID: 0}
-  Texture: {fileID: 0}
+  Model: {fileID: -3136520972594206927, guid: 47a4e3851f911ae408b139bc1dd037a6, type: 3}
+  Texture: {fileID: 2100000, guid: 207cab9a5bbfcd3468bc0733f8568955, type: 2}
   Damage: 1
   AttackSpeed: 1

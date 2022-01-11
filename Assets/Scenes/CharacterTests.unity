@@ -2200,7 +2200,7 @@ PrefabInstance:
     - target: {fileID: 4630841792200528481, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: Equipment.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 93bbf4f118c7f6b45be8a09d1a0e0cec, type: 2}
+      objectReference: {fileID: 11400000, guid: 8174d821a5027f045ab953e87431ea88, type: 2}
     - target: {fileID: 4630841792200528481, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: Equipment.Array.data[1]
       value: 
@@ -2213,6 +2213,14 @@ PrefabInstance:
       propertyPath: Equipment.Array.data[3]
       value: 
       objectReference: {fileID: 11400000, guid: fcece9faf186b9c47a574e3ef6992d55, type: 2}
+    - target: {fileID: 7753543258665445789, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: m_Name
+      value: Equipment Stand Ins
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543258858979141, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7753543260145612362, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -2288,6 +2296,26 @@ PrefabInstance:
     - target: {fileID: 7753543260145612366, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: m_Name
       value: CharacterController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260386780384, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260386780385, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.875
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260386780385, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.164
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260386780385, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.711
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753543260657061678, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8705395131389119451, guid: a9fa376224ea19c489ccc1b0224927b1, type: 3}
       propertyPath: jumpForce

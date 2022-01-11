@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 072b351d1bb2e624281a75d297f77100, type: 3}
   m_Name: SingleFireTest
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Base Rifle
   Type: 0
-  Model: {fileID: 0}
-  Texture: {fileID: 0}
+  Model: {fileID: -2068842677176881288, guid: 47a4e3851f911ae408b139bc1dd037a6, type: 3}
+  Texture: {fileID: 2100000, guid: 207cab9a5bbfcd3468bc0733f8568955, type: 2}
   Damage: 1
   RoundsPerMinute: 1
-  Projectile: {fileID: 0}
+  Projectile: {fileID: 6639350068548514455, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}

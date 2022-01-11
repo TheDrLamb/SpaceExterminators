@@ -5,10 +5,6 @@ using System.Threading.Tasks;
 [CreateAssetMenu(fileName = "New Consumable", menuName = "ScriptableObjects/Equipment/Consumable/Consumable", order = 0)]
 public class Base_Consumable_ScriptableObject : Base_Equipment_ScriptableObject
 {
-    //Model
-    public Mesh Model;
-    //Texture
-    public Material Texture; // Possibly change this to be an actual texture that sets the texure on the material later.
     //Quatity
     public int Quantity;
     protected int CurrentQuantity;

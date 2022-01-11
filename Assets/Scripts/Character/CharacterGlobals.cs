@@ -12,7 +12,6 @@ public static class CharacterGlobals
     {
         Gun,
         Tool,
-        Consumable,
-        Throwable
+        Consumable
     }
 }

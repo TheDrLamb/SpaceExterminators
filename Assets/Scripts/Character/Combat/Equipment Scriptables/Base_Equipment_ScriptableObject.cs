@@ -6,6 +6,11 @@ public class Base_Equipment_ScriptableObject : ScriptableObject
 {
     public string Name;
     public CharacterGlobals.Equipment Type;
+    //Model
+    public Mesh Model;
+    //Texture
+    public Material Texture; // Possibly change this to be an actual texture that sets the texure on the material later.
+
     Task currentTask;
     protected bool triggerDown;
 
