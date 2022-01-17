@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 public class Base_Equipment_ScriptableObject : ScriptableObject
 {
     public string Name;
+    protected int ID;
     public CharacterGlobals.Equipment Type;
     //Model
     public Mesh Model;
@@ -13,8 +14,13 @@ public class Base_Equipment_ScriptableObject : ScriptableObject
 
     Task currentTask;
     protected bool triggerDown;
+    protected CharacterEquipmentController controller;
 
-    public virtual void Initialize(){}
+    public virtual void Initialize(int _id, CharacterEquipmentController _controller)
+    {
+        ID = _id;
+        controller = _controller;
+    }
 
     //[NOTE] -> Pass the fire location through the action to the Task?
     public virtual void OnFireDownAction(InputAction.CallbackContext callback) 

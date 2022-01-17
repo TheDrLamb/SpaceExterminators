@@ -12,6 +12,7 @@ public class CharacterEquipmentController : MonoBehaviour
     public Task currentTask;
     public GameObject[] StandIns;
     public Base_Equipment_ScriptableObject[] Equipment;
+    public Transform GunFirePoint;
     #endregion
 
     #region Private Variables
@@ -22,10 +23,10 @@ public class CharacterEquipmentController : MonoBehaviour
     //Animation
     Animator anim;
     int equipmentHash;
-    public int anim_EquipmentState = -1;
+    int anim_EquipmentState = -1;
 
     //Combat Input Logic
-    public bool canSwapEquipment = true;
+    bool canSwapEquipment = true;
 
     //Combat Input Delegates
     Action<InputAction.CallbackContext> onFire_Start;
@@ -33,23 +34,11 @@ public class CharacterEquipmentController : MonoBehaviour
     Action<InputAction.CallbackContext> onFire_Perform;
 
     //Equipment
-    int equipment = -1;
+    int equipmentIndex = -1;
 
     #endregion
 
     #region Getters and Setters
-    public int Anim_EquipmentState
-    {
-        get
-        {
-            return anim_EquipmentState;
-        }
-        set
-        {
-            anim_EquipmentState = value;
-            anim.SetInteger(equipmentHash, anim_EquipmentState);
-        }
-    }
     #endregion
 
     #region Initializing
@@ -87,7 +76,7 @@ public class CharacterEquipmentController : MonoBehaviour
         for (int i = 0; i < Equipment.Length; i++)
         {
             Base_Equipment_ScriptableObject equip = Equipment[i];
-            equip.Initialize();
+            equip.Initialize(i, this);
             if (i <= 2) {
                 //Set the Model and Material for Equipment 1, 2, (and 3 if it exists)
                 StandIns[i].GetComponent<MeshFilter>().mesh = equip.Model;
@@ -110,7 +99,7 @@ public class CharacterEquipmentController : MonoBehaviour
     #endregion
 
     #region Animation Callbacks
-    public async Task EquipmentSwapTimer() 
+    public async Task EquipmentSwapTimer()
     {
         await Task.Delay((int)(1000 * equipmentSwapTimer));
         canSwapEquipment = true;
@@ -120,7 +109,7 @@ public class CharacterEquipmentController : MonoBehaviour
     #region Input Events
     void OnScroll(InputAction.CallbackContext context)
     {
-        int newEquipment = equipment - (int)context.ReadValue<float>();
+        int newEquipment = equipmentIndex - (int)context.ReadValue<float>();
         SwitchEquipment(Utility.WrapAround(newEquipment, 0, 4));
     }
 
@@ -130,27 +119,42 @@ public class CharacterEquipmentController : MonoBehaviour
         SwitchEquipment(newEquipment);
     }
 
-    public void SwitchEquipment(int _newEquipment)
+    public void SwitchEquipment(int _newEquipmentIndex)
     {
-        if (canSwapEquipment && _newEquipment != equipment)
+        if (canSwapEquipment && _newEquipmentIndex != equipmentIndex && Equipment[_newEquipmentIndex] != null)
         {
             canSwapEquipment = false;
-            equipment = _newEquipment;
+            equipmentIndex = _newEquipmentIndex;
             //Get Equipment at index _newEquipment
-            if (Equipment[equipment] != null) {
+            if (Equipment[equipmentIndex] != null) {
                 //Set the Animation state to the corresponding type value
-                if (equipment >= 2) {
-                    StandIns[2].GetComponent<MeshFilter>().mesh = Equipment[equipment].Model;
-                    StandIns[2].GetComponent<MeshRenderer>().material = Equipment[equipment].Texture;
+                if (equipmentIndex >= 2) {
+                    StandIns[2].GetComponent<MeshFilter>().mesh = Equipment[equipmentIndex].Model;
+                    StandIns[2].GetComponent<MeshRenderer>().material = Equipment[equipmentIndex].Texture;
                 }
-                anim_EquipmentState = (int)Equipment[equipment].Type;
-                anim.SetInteger(equipmentHash, anim_EquipmentState);
+                SetAnimatorState((int)Equipment[equipmentIndex].Type);
                 //Assign Action Callbacks
-                SetFireAction(ActionType.Perform, Equipment[equipment].OnFireDownAction);
-                SetFireAction(ActionType.Cancel, Equipment[equipment].OnFireUpAction);
+                SetFireAction(ActionType.Perform, Equipment[equipmentIndex].OnFireDownAction);
+                SetFireAction(ActionType.Cancel, Equipment[equipmentIndex].OnFireUpAction);
                 if (currentTask == null || currentTask.IsCompleted) currentTask = EquipmentSwapTimer();
             }
         }
+    }
+
+    public void RemoveEquipment(int _id) {
+        //Remove equipment at index _id
+        Equipment[_id] = null;
+    }
+
+
+    public void SetAnimatorState(int _state) {
+        anim_EquipmentState = _state;
+        anim.SetInteger(equipmentHash, anim_EquipmentState);
+    }
+
+    public int GetAnimatorState()
+    {
+        return anim_EquipmentState;
     }
 
     void NullAction(InputAction.CallbackContext context)

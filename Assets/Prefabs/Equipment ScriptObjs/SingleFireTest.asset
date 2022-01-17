@@ -17,5 +17,6 @@ MonoBehaviour:
   Model: {fileID: -2068842677176881288, guid: 47a4e3851f911ae408b139bc1dd037a6, type: 3}
   Texture: {fileID: 2100000, guid: 207cab9a5bbfcd3468bc0733f8568955, type: 2}
   Damage: 1
-  RoundsPerMinute: 1
-  Projectile: {fileID: 6639350068548514455, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}
+  RoundsPerSecond: 1
+  Projectile: {fileID: 5464382313041149617, guid: 24ad0aeceef20d24580178a20bd1c7dc, type: 3}
+  projectileSpeed: 2000

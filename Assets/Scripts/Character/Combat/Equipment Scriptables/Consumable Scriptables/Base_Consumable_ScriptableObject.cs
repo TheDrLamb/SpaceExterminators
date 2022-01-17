@@ -13,21 +13,25 @@ public class Base_Consumable_ScriptableObject : Base_Equipment_ScriptableObject
     //Sound
     //Cooldown?
 
-    public override void Initialize()
+    public override void Initialize(int _id, CharacterEquipmentController _controller)
     {
+        ID = _id;
         CurrentQuantity = Quantity;
+        controller = _controller;
     }
 
     public void Decrement()
     {
         CurrentQuantity--;
         //[NOTE] - If the current quantity is 0 then the equipment should be Removed/Unusable
+        if (CurrentQuantity <= 0) controller.RemoveEquipment(ID);
     }
 
     public void Decrement(int _amt)
     {
         CurrentQuantity -= _amt;
         //[NOTE] - If the current quantity is 0 then the equipment should be Removed/Unusable
+        if (CurrentQuantity <= 0) controller.RemoveEquipment(ID);
     }
 
     public void Increment()

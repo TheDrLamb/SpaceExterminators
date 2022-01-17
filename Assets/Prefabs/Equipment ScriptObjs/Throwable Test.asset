@@ -18,4 +18,4 @@ MonoBehaviour:
   Texture: {fileID: 2100000, guid: 207cab9a5bbfcd3468bc0733f8568955, type: 2}
   Quantity: 2
   AnimationSpeed: 1
-  ThrowableProjectile: {fileID: 0}
+  ThrowableProjectile: {fileID: 7299964452111561848, guid: 6eca53bc6b1076143967c84def1f533e, type: 3}
